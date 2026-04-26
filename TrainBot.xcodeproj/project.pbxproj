@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		369F8C3FA40BA4AA46F45AB9 /* TrainBotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7237D3FBE470164E2D209CCB /* TrainBotApp.swift */; };
 		42FF954C65B432CEA9DBC494 /* TrainBotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F93BA5DD9D75BAB43C2092 /* TrainBotTests.swift */; };
 		4A971B8A2D3494DAE7FF9C8C /* TrainBotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491247C54ADADACE65BECD2C /* TrainBotUITests.swift */; };
+		760230A10568FC9607DE5636 /* TrainBotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30345DCA5575F2DD7B6E87A8 /* TrainBotApp.swift */; };
 		A24334F58E5CF7708162A598 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20BDF01E051597ABD389266D /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -31,17 +31,42 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0CA382BC68A350154C9975D3 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		1DE2C022F9A40B49FB5F9A07 /* TrainBotUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TrainBotUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		20BDF01E051597ABD389266D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		30345DCA5575F2DD7B6E87A8 /* TrainBotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainBotApp.swift; sourceTree = "<group>"; };
+		3263626EBFE10435433CAC66 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		3DD31D77D62DE71F0390CB49 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		3F1786123EE4863175FEAC89 /* TrainBot.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TrainBot.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		425809D7B23FD6232F43F77E /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		491247C54ADADACE65BECD2C /* TrainBotUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainBotUITests.swift; sourceTree = "<group>"; };
 		50F93BA5DD9D75BAB43C2092 /* TrainBotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainBotTests.swift; sourceTree = "<group>"; };
 		6E0ED75950D4666A34CB092B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		7237D3FBE470164E2D209CCB /* TrainBotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainBotApp.swift; sourceTree = "<group>"; };
+		8433D60DCD0FB822FDC50029 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		A04FCD158FE7A7D0D56A4E8E /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		D2380A2FA9F7AC1B62C231F7 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		D7798308D6AD1B65200D77C3 /* TrainBotTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TrainBotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		ECCD1C97D1B9A2A5823237B3 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		F99B82E9FD96E5B628D87842 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		0126FA6F6436E22CF7CE9996 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				3DD31D77D62DE71F0390CB49 /* .gitkeep */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		0955F10ED5901F96AF6875B3 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				F99B82E9FD96E5B628D87842 /* .gitkeep */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
 		0D5914F28C68359175E0FF23 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -52,6 +77,22 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		19FCDEBDF2776727DF5113BC /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				3263626EBFE10435433CAC66 /* .gitkeep */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
+		5DE8E8FCD98DB814140B5CB7 /* Mascot */ = {
+			isa = PBXGroup;
+			children = (
+				D2380A2FA9F7AC1B62C231F7 /* .gitkeep */,
+			);
+			path = Mascot;
+			sourceTree = "<group>";
+		};
 		82ECEFDAB9C9C244AD3C5B62 /* TrainBotTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -60,14 +101,63 @@
 			path = TrainBotTests;
 			sourceTree = "<group>";
 		};
+		84BE9CC1D567F2353F256037 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0126FA6F6436E22CF7CE9996 /* Fonts */,
+				19FCDEBDF2776727DF5113BC /* Sounds */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		8E63F45FDE63E6C658F1892E /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				CB6C377E9D9B0AE9611312AE /* Components */,
+				5DE8E8FCD98DB814140B5CB7 /* Mascot */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		977C570B52B19EBFAD7FE370 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				EE84BE002C9D0234608A2F2E /* Network */,
+				A557CA7C4A72106F33D95F4C /* Storage */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
 		9A590448917568ADCEEE92A1 /* TrainBot */ = {
 			isa = PBXGroup;
 			children = (
+				A599130DF09BD1E1965FCDDF /* App */,
+				977C570B52B19EBFAD7FE370 /* Core */,
+				8E63F45FDE63E6C658F1892E /* DesignSystem */,
+				0955F10ED5901F96AF6875B3 /* Features */,
+				F4356488CC1D4D6A8DA0CB79 /* ML */,
+				84BE9CC1D567F2353F256037 /* Resources */,
 				20BDF01E051597ABD389266D /* Assets.xcassets */,
 				6E0ED75950D4666A34CB092B /* Info.plist */,
-				7237D3FBE470164E2D209CCB /* TrainBotApp.swift */,
 			);
 			path = TrainBot;
+			sourceTree = "<group>";
+		};
+		A557CA7C4A72106F33D95F4C /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				8433D60DCD0FB822FDC50029 /* .gitkeep */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		A599130DF09BD1E1965FCDDF /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A04FCD158FE7A7D0D56A4E8E /* .gitkeep */,
+				30345DCA5575F2DD7B6E87A8 /* TrainBotApp.swift */,
+			);
+			path = App;
 			sourceTree = "<group>";
 		};
 		AB6C955DE2E0C3B2CD94D2B2 /* TrainBotUITests */ = {
@@ -86,6 +176,30 @@
 				AB6C955DE2E0C3B2CD94D2B2 /* TrainBotUITests */,
 				0D5914F28C68359175E0FF23 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		CB6C377E9D9B0AE9611312AE /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				425809D7B23FD6232F43F77E /* .gitkeep */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		EE84BE002C9D0234608A2F2E /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				0CA382BC68A350154C9975D3 /* .gitkeep */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		F4356488CC1D4D6A8DA0CB79 /* ML */ = {
+			isa = PBXGroup;
+			children = (
+				ECCD1C97D1B9A2A5823237B3 /* .gitkeep */,
+			);
+			path = ML;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -220,7 +334,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				369F8C3FA40BA4AA46F45AB9 /* TrainBotApp.swift in Sources */,
+				760230A10568FC9607DE5636 /* TrainBotApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
