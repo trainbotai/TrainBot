@@ -20,6 +20,7 @@
 		450512255A558102ABC0BA1B /* MLProjectEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B1048384090C714C51069D /* MLProjectEntity+CoreDataClass.swift */; };
 		4860FF930B4910EB45ED86D1 /* NavigationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4727A74134DE2E63BF6C61C1 /* NavigationCard.swift */; };
 		4A971B8A2D3494DAE7FF9C8C /* TrainBotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491247C54ADADACE65BECD2C /* TrainBotUITests.swift */; };
+		4DE5FC5F54B13123643F5799 /* TrainingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F2EF33A84A85ADD9CF39764 /* TrainingViewModel.swift */; };
 		516F59F54E85F0F2FD4BD7BD /* ImageClassifierTrainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F24600AD8935156C7899EFC /* ImageClassifierTrainerTests.swift */; };
 		57191570E3EAC476EF1BA60A /* CreateMLComponents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DF67461DA0DFB6911F86583 /* CreateMLComponents.framework */; };
 		5FB03424F1D838F160A69A25 /* TrainBot.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 74B270B2A0F8FCA7C0A39B7A /* TrainBot.xcdatamodeld */; };
@@ -66,6 +67,7 @@
 		0B1C8019A99613A41E97B466 /* MascotState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MascotState.swift; sourceTree = "<group>"; };
 		0CA382BC68A350154C9975D3 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		0EE23539C8D2BB1A5786367A /* KnowledgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnowledgeView.swift; sourceTree = "<group>"; };
+		0F2EF33A84A85ADD9CF39764 /* TrainingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingViewModel.swift; sourceTree = "<group>"; };
 		1873B6E8B5A42B4F26372D85 /* MascotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MascotView.swift; sourceTree = "<group>"; };
 		18DF48209005550E45045F20 /* DailyChallengeEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyChallengeEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		1DE2C022F9A40B49FB5F9A07 /* TrainBotUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TrainBotUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -177,6 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				02C2C6B23B0F0B2F5766DF5C /* TrainingView.swift */,
+				0F2EF33A84A85ADD9CF39764 /* TrainingViewModel.swift */,
 			);
 			path = Training;
 			sourceTree = "<group>";
@@ -541,6 +544,7 @@
 				760230A10568FC9607DE5636 /* TrainBotApp.swift in Sources */,
 				65A016997F7E9B2B320468EE /* TrainedClassifier.swift in Sources */,
 				8CA29C27689742BCA429FE9B /* TrainingView.swift in Sources */,
+				4DE5FC5F54B13123643F5799 /* TrainingViewModel.swift in Sources */,
 				3CD8A37864304F3787DE6793 /* Typography.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
