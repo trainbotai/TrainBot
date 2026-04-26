@@ -25,6 +25,7 @@ targets:
       - path: TrainBot
     resources:
       - path: TrainBot/Assets.xcassets
+      - path: TrainBot/Core/Storage/TrainBot.xcdatamodeld
     info:
       path: TrainBot/Info.plist
       properties:
