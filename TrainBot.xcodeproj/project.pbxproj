@@ -12,6 +12,7 @@
 		07F840708D888B3051C45E39 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FEF04E4CE5543F00E63150 /* PersistenceController.swift */; };
 		13ED790853A7F1320D7A2622 /* MLImageEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EACAB1276B8F0040D6398CFD /* MLImageEntity+CoreDataClass.swift */; };
 		1B27FF9AF8C2B10C64B2407B /* DailyChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15DEC4F5BAFCE09EB6C035B /* DailyChallengeView.swift */; };
+		22638E5F9937C0E8D3A677F3 /* DailyChallengeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A4E18E7126A62D8F0EB819 /* DailyChallengeService.swift */; };
 		24EF475072BE37742AFA76D7 /* ImageStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2776CE1D4D652C47DA2DBD88 /* ImageStorage.swift */; };
 		2550CA737C6685FA4207A122 /* TestingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20114F5CF592023B77A4ACD8 /* TestingView.swift */; };
 		31879CED3DEAB04E384D2753 /* MLProjectRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 876C6FADA1776CE4DCAE46D5 /* MLProjectRepository.swift */; };
@@ -97,6 +98,7 @@
 		6253DB5B170593539FC20DE4 /* AchievementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsView.swift; sourceTree = "<group>"; };
 		67463286030BA5199E50FE39 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		6E0ED75950D4666A34CB092B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		79A4E18E7126A62D8F0EB819 /* DailyChallengeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyChallengeService.swift; sourceTree = "<group>"; };
 		8433D60DCD0FB822FDC50029 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		87264F94D59D68680391E426 /* MLModelEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MLModelEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		876C6FADA1776CE4DCAE46D5 /* MLProjectRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLProjectRepository.swift; sourceTree = "<group>"; };
@@ -377,6 +379,7 @@
 			isa = PBXGroup;
 			children = (
 				ECCD1C97D1B9A2A5823237B3 /* .gitkeep */,
+				79A4E18E7126A62D8F0EB819 /* DailyChallengeService.swift */,
 				53FD0D948828275B34683E59 /* ImageClassifierTrainer.swift */,
 				876C6FADA1776CE4DCAE46D5 /* MLProjectRepository.swift */,
 				BFF41C60612B8FEFC2FB365E /* TrainedClassifier.swift */,
@@ -525,6 +528,7 @@
 				EB6E8C17D4E6025130C7F095 /* AppCard.swift in Sources */,
 				D16DD6B754434FFEB6FD4C5A /* Colors.swift in Sources */,
 				C1418DA071D52E0CF79DD996 /* DailyChallengeEntity+CoreDataClass.swift in Sources */,
+				22638E5F9937C0E8D3A677F3 /* DailyChallengeService.swift in Sources */,
 				1B27FF9AF8C2B10C64B2407B /* DailyChallengeView.swift in Sources */,
 				86CAC50B05799CA78720B924 /* HomeView.swift in Sources */,
 				B0365B5C530F4F5F3FF0A5AC /* ImageClassifierTrainer.swift in Sources */,

@@ -70,6 +70,7 @@ final class MLProjectRepository {
         entity.label = label
         label.project?.updatedAt = Date()
         try context.save()
+        DailyChallengeService(context: context).incrementProgress(by: 1)
         return entity
     }
 
