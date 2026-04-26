@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		045120D7A79970379FE75F07 /* ImageStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3846FACC22577E376AA40BBD /* ImageStorageTests.swift */; };
 		07F840708D888B3051C45E39 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FEF04E4CE5543F00E63150 /* PersistenceController.swift */; };
 		13ED790853A7F1320D7A2622 /* MLImageEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EACAB1276B8F0040D6398CFD /* MLImageEntity+CoreDataClass.swift */; };
+		24EF475072BE37742AFA76D7 /* ImageStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2776CE1D4D652C47DA2DBD88 /* ImageStorage.swift */; };
 		42FF954C65B432CEA9DBC494 /* TrainBotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F93BA5DD9D75BAB43C2092 /* TrainBotTests.swift */; };
 		450512255A558102ABC0BA1B /* MLProjectEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B1048384090C714C51069D /* MLProjectEntity+CoreDataClass.swift */; };
 		4A971B8A2D3494DAE7FF9C8C /* TrainBotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491247C54ADADACE65BECD2C /* TrainBotUITests.swift */; };
@@ -44,8 +46,10 @@
 		1DE2C022F9A40B49FB5F9A07 /* TrainBotUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TrainBotUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		20BDF01E051597ABD389266D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		227AF9867F84CE55F8640A26 /* MLLabelEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MLLabelEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		2776CE1D4D652C47DA2DBD88 /* ImageStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorage.swift; sourceTree = "<group>"; };
 		30345DCA5575F2DD7B6E87A8 /* TrainBotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainBotApp.swift; sourceTree = "<group>"; };
 		3263626EBFE10435433CAC66 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		3846FACC22577E376AA40BBD /* ImageStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorageTests.swift; sourceTree = "<group>"; };
 		3DD31D77D62DE71F0390CB49 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		3F1786123EE4863175FEAC89 /* TrainBot.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TrainBot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		425809D7B23FD6232F43F77E /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
@@ -125,6 +129,7 @@
 		82ECEFDAB9C9C244AD3C5B62 /* TrainBotTests */ = {
 			isa = PBXGroup;
 			children = (
+				3846FACC22577E376AA40BBD /* ImageStorageTests.swift */,
 				50F93BA5DD9D75BAB43C2092 /* TrainBotTests.swift */,
 			);
 			path = TrainBotTests;
@@ -178,6 +183,7 @@
 				81F60F3127149CA695FE5FF6 /* Generated */,
 				74B270B2A0F8FCA7C0A39B7A /* TrainBot.xcdatamodeld */,
 				8433D60DCD0FB822FDC50029 /* .gitkeep */,
+				2776CE1D4D652C47DA2DBD88 /* ImageStorage.swift */,
 				C1FEF04E4CE5543F00E63150 /* PersistenceController.swift */,
 			);
 			path = Storage;
@@ -358,6 +364,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				045120D7A79970379FE75F07 /* ImageStorageTests.swift in Sources */,
 				42FF954C65B432CEA9DBC494 /* TrainBotTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -368,6 +375,7 @@
 			files = (
 				6B40196BE0A945324A3B6141 /* AchievementEntity+CoreDataClass.swift in Sources */,
 				C1418DA071D52E0CF79DD996 /* DailyChallengeEntity+CoreDataClass.swift in Sources */,
+				24EF475072BE37742AFA76D7 /* ImageStorage.swift in Sources */,
 				13ED790853A7F1320D7A2622 /* MLImageEntity+CoreDataClass.swift in Sources */,
 				DCEA643151DCFE7BDCB9B7B5 /* MLLabelEntity+CoreDataClass.swift in Sources */,
 				B6D580590EF66374093E4B64 /* MLModelEntity+CoreDataClass.swift in Sources */,
