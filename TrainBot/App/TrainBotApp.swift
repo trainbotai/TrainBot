@@ -2,10 +2,12 @@ import SwiftUI
 
 @main
 struct TrainBotApp: App {
+    let persistence = PersistenceController.shared
+
     var body: some Scene {
         WindowGroup {
-            Text("TrainBot — Setup")
-                .padding()
+            HomeView()
+                .environment(\.managedObjectContext, persistence.container.viewContext)
         }
     }
 }
