@@ -11,17 +11,22 @@
 		07F840708D888B3051C45E39 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FEF04E4CE5543F00E63150 /* PersistenceController.swift */; };
 		13ED790853A7F1320D7A2622 /* MLImageEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EACAB1276B8F0040D6398CFD /* MLImageEntity+CoreDataClass.swift */; };
 		24EF475072BE37742AFA76D7 /* ImageStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2776CE1D4D652C47DA2DBD88 /* ImageStorage.swift */; };
+		3CD8A37864304F3787DE6793 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598DDF2384BB3AB8BE774DD5 /* Typography.swift */; };
 		42FF954C65B432CEA9DBC494 /* TrainBotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F93BA5DD9D75BAB43C2092 /* TrainBotTests.swift */; };
 		450512255A558102ABC0BA1B /* MLProjectEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B1048384090C714C51069D /* MLProjectEntity+CoreDataClass.swift */; };
+		4860FF930B4910EB45ED86D1 /* NavigationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4727A74134DE2E63BF6C61C1 /* NavigationCard.swift */; };
 		4A971B8A2D3494DAE7FF9C8C /* TrainBotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491247C54ADADACE65BECD2C /* TrainBotUITests.swift */; };
 		5FB03424F1D838F160A69A25 /* TrainBot.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 74B270B2A0F8FCA7C0A39B7A /* TrainBot.xcdatamodeld */; };
 		6B40196BE0A945324A3B6141 /* AchievementEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C172260E6C6D306F982505 /* AchievementEntity+CoreDataClass.swift */; };
 		760230A10568FC9607DE5636 /* TrainBotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30345DCA5575F2DD7B6E87A8 /* TrainBotApp.swift */; };
 		A24334F58E5CF7708162A598 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20BDF01E051597ABD389266D /* Assets.xcassets */; };
+		B14A2EF12A5DC75200E81929 /* SecondaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D4D34DCA73EE04F2B492D /* SecondaryButton.swift */; };
 		B6D580590EF66374093E4B64 /* MLModelEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87264F94D59D68680391E426 /* MLModelEntity+CoreDataClass.swift */; };
 		C1418DA071D52E0CF79DD996 /* DailyChallengeEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF48209005550E45045F20 /* DailyChallengeEntity+CoreDataClass.swift */; };
+		CCF7F8383A6071CF892AF6D1 /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60706F22693E5FC3EA2A6224 /* PrimaryButton.swift */; };
 		D16DD6B754434FFEB6FD4C5A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67463286030BA5199E50FE39 /* Colors.swift */; };
 		DCEA643151DCFE7BDCB9B7B5 /* MLLabelEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227AF9867F84CE55F8640A26 /* MLLabelEntity+CoreDataClass.swift */; };
+		EB6E8C17D4E6025130C7F095 /* AppCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA62D002C72728761229B69A /* AppCard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,8 +59,12 @@
 		3DD31D77D62DE71F0390CB49 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		3F1786123EE4863175FEAC89 /* TrainBot.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TrainBot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		425809D7B23FD6232F43F77E /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		4727A74134DE2E63BF6C61C1 /* NavigationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCard.swift; sourceTree = "<group>"; };
 		491247C54ADADACE65BECD2C /* TrainBotUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainBotUITests.swift; sourceTree = "<group>"; };
 		50F93BA5DD9D75BAB43C2092 /* TrainBotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainBotTests.swift; sourceTree = "<group>"; };
+		551D4D34DCA73EE04F2B492D /* SecondaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryButton.swift; sourceTree = "<group>"; };
+		598DDF2384BB3AB8BE774DD5 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
+		60706F22693E5FC3EA2A6224 /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
 		67463286030BA5199E50FE39 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		6E0ED75950D4666A34CB092B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8433D60DCD0FB822FDC50029 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
@@ -63,6 +72,7 @@
 		97B32648FA627BD8B6E09B62 /* TrainBot.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrainBot.xcdatamodel; sourceTree = "<group>"; };
 		A04FCD158FE7A7D0D56A4E8E /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		A7C172260E6C6D306F982505 /* AchievementEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AchievementEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		AA62D002C72728761229B69A /* AppCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCard.swift; sourceTree = "<group>"; };
 		C1FEF04E4CE5543F00E63150 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		D2380A2FA9F7AC1B62C231F7 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		D7798308D6AD1B65200D77C3 /* TrainBotTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TrainBotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -152,6 +162,7 @@
 				CB6C377E9D9B0AE9611312AE /* Components */,
 				5DE8E8FCD98DB814140B5CB7 /* Mascot */,
 				67463286030BA5199E50FE39 /* Colors.swift */,
+				598DDF2384BB3AB8BE774DD5 /* Typography.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -223,6 +234,10 @@
 			isa = PBXGroup;
 			children = (
 				425809D7B23FD6232F43F77E /* .gitkeep */,
+				AA62D002C72728761229B69A /* AppCard.swift */,
+				4727A74134DE2E63BF6C61C1 /* NavigationCard.swift */,
+				60706F22693E5FC3EA2A6224 /* PrimaryButton.swift */,
+				551D4D34DCA73EE04F2B492D /* SecondaryButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -377,6 +392,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B40196BE0A945324A3B6141 /* AchievementEntity+CoreDataClass.swift in Sources */,
+				EB6E8C17D4E6025130C7F095 /* AppCard.swift in Sources */,
 				D16DD6B754434FFEB6FD4C5A /* Colors.swift in Sources */,
 				C1418DA071D52E0CF79DD996 /* DailyChallengeEntity+CoreDataClass.swift in Sources */,
 				24EF475072BE37742AFA76D7 /* ImageStorage.swift in Sources */,
@@ -384,9 +400,13 @@
 				DCEA643151DCFE7BDCB9B7B5 /* MLLabelEntity+CoreDataClass.swift in Sources */,
 				B6D580590EF66374093E4B64 /* MLModelEntity+CoreDataClass.swift in Sources */,
 				450512255A558102ABC0BA1B /* MLProjectEntity+CoreDataClass.swift in Sources */,
+				4860FF930B4910EB45ED86D1 /* NavigationCard.swift in Sources */,
 				07F840708D888B3051C45E39 /* PersistenceController.swift in Sources */,
+				CCF7F8383A6071CF892AF6D1 /* PrimaryButton.swift in Sources */,
+				B14A2EF12A5DC75200E81929 /* SecondaryButton.swift in Sources */,
 				5FB03424F1D838F160A69A25 /* TrainBot.xcdatamodeld in Sources */,
 				760230A10568FC9607DE5636 /* TrainBotApp.swift in Sources */,
+				3CD8A37864304F3787DE6793 /* Typography.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
