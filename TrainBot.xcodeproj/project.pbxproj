@@ -41,6 +41,7 @@
 		CCF7F8383A6071CF892AF6D1 /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60706F22693E5FC3EA2A6224 /* PrimaryButton.swift */; };
 		D16DD6B754434FFEB6FD4C5A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67463286030BA5199E50FE39 /* Colors.swift */; };
 		DCEA643151DCFE7BDCB9B7B5 /* MLLabelEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227AF9867F84CE55F8640A26 /* MLLabelEntity+CoreDataClass.swift */; };
+		E6B3027A65EA05ABF326A92E /* TestingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D95F4A28387BBEF2893452E /* TestingViewModel.swift */; };
 		EB6E8C17D4E6025130C7F095 /* AppCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA62D002C72728761229B69A /* AppCard.swift */; };
 		FF412E8A0EE5C45CEA5EE653 /* MLProjectRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0FA3A5FBA413526C828CBC0 /* MLProjectRepositoryTests.swift */; };
 /* End PBXBuildFile section */
@@ -70,6 +71,7 @@
 		0F2EF33A84A85ADD9CF39764 /* TrainingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingViewModel.swift; sourceTree = "<group>"; };
 		1873B6E8B5A42B4F26372D85 /* MascotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MascotView.swift; sourceTree = "<group>"; };
 		18DF48209005550E45045F20 /* DailyChallengeEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyChallengeEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		1D95F4A28387BBEF2893452E /* TestingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingViewModel.swift; sourceTree = "<group>"; };
 		1DE2C022F9A40B49FB5F9A07 /* TrainBotUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TrainBotUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F24600AD8935156C7899EFC /* ImageClassifierTrainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageClassifierTrainerTests.swift; sourceTree = "<group>"; };
 		20114F5CF592023B77A4ACD8 /* TestingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingView.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				20114F5CF592023B77A4ACD8 /* TestingView.swift */,
+				1D95F4A28387BBEF2893452E /* TestingViewModel.swift */,
 			);
 			path = Testing;
 			sourceTree = "<group>";
@@ -540,6 +543,7 @@
 				B14A2EF12A5DC75200E81929 /* SecondaryButton.swift in Sources */,
 				81D50D4033609FC571999BCB /* SettingsView.swift in Sources */,
 				2550CA737C6685FA4207A122 /* TestingView.swift in Sources */,
+				E6B3027A65EA05ABF326A92E /* TestingViewModel.swift in Sources */,
 				5FB03424F1D838F160A69A25 /* TrainBot.xcdatamodeld in Sources */,
 				760230A10568FC9607DE5636 /* TrainBotApp.swift in Sources */,
 				65A016997F7E9B2B320468EE /* TrainedClassifier.swift in Sources */,
