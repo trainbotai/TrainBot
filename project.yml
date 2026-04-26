@@ -23,6 +23,8 @@ targets:
     deploymentTarget: "17.0"
     sources:
       - path: TrainBot
+    dependencies:
+      - sdk: CreateMLComponents.framework
     resources:
       - path: TrainBot/Assets.xcassets
       - path: TrainBot/Core/Storage/TrainBot.xcdatamodeld

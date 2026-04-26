@@ -17,10 +17,14 @@
 		450512255A558102ABC0BA1B /* MLProjectEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B1048384090C714C51069D /* MLProjectEntity+CoreDataClass.swift */; };
 		4860FF930B4910EB45ED86D1 /* NavigationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4727A74134DE2E63BF6C61C1 /* NavigationCard.swift */; };
 		4A971B8A2D3494DAE7FF9C8C /* TrainBotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491247C54ADADACE65BECD2C /* TrainBotUITests.swift */; };
+		516F59F54E85F0F2FD4BD7BD /* ImageClassifierTrainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F24600AD8935156C7899EFC /* ImageClassifierTrainerTests.swift */; };
+		57191570E3EAC476EF1BA60A /* CreateMLComponents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DF67461DA0DFB6911F86583 /* CreateMLComponents.framework */; };
 		5FB03424F1D838F160A69A25 /* TrainBot.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 74B270B2A0F8FCA7C0A39B7A /* TrainBot.xcdatamodeld */; };
+		65A016997F7E9B2B320468EE /* TrainedClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF41C60612B8FEFC2FB365E /* TrainedClassifier.swift */; };
 		6B40196BE0A945324A3B6141 /* AchievementEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C172260E6C6D306F982505 /* AchievementEntity+CoreDataClass.swift */; };
 		760230A10568FC9607DE5636 /* TrainBotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30345DCA5575F2DD7B6E87A8 /* TrainBotApp.swift */; };
 		A24334F58E5CF7708162A598 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20BDF01E051597ABD389266D /* Assets.xcassets */; };
+		B0365B5C530F4F5F3FF0A5AC /* ImageClassifierTrainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD0D948828275B34683E59 /* ImageClassifierTrainer.swift */; };
 		B14A2EF12A5DC75200E81929 /* SecondaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D4D34DCA73EE04F2B492D /* SecondaryButton.swift */; };
 		B6D580590EF66374093E4B64 /* MLModelEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87264F94D59D68680391E426 /* MLModelEntity+CoreDataClass.swift */; };
 		C1418DA071D52E0CF79DD996 /* DailyChallengeEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF48209005550E45045F20 /* DailyChallengeEntity+CoreDataClass.swift */; };
@@ -54,9 +58,11 @@
 		1873B6E8B5A42B4F26372D85 /* MascotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MascotView.swift; sourceTree = "<group>"; };
 		18DF48209005550E45045F20 /* DailyChallengeEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyChallengeEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		1DE2C022F9A40B49FB5F9A07 /* TrainBotUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TrainBotUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F24600AD8935156C7899EFC /* ImageClassifierTrainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageClassifierTrainerTests.swift; sourceTree = "<group>"; };
 		20BDF01E051597ABD389266D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		227AF9867F84CE55F8640A26 /* MLLabelEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MLLabelEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2776CE1D4D652C47DA2DBD88 /* ImageStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorage.swift; sourceTree = "<group>"; };
+		2DF67461DA0DFB6911F86583 /* CreateMLComponents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CreateMLComponents.framework; path = System/Library/Frameworks/CreateMLComponents.framework; sourceTree = SDKROOT; };
 		30345DCA5575F2DD7B6E87A8 /* TrainBotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainBotApp.swift; sourceTree = "<group>"; };
 		3263626EBFE10435433CAC66 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		3846FACC22577E376AA40BBD /* ImageStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorageTests.swift; sourceTree = "<group>"; };
@@ -66,6 +72,7 @@
 		4727A74134DE2E63BF6C61C1 /* NavigationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCard.swift; sourceTree = "<group>"; };
 		491247C54ADADACE65BECD2C /* TrainBotUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainBotUITests.swift; sourceTree = "<group>"; };
 		50F93BA5DD9D75BAB43C2092 /* TrainBotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainBotTests.swift; sourceTree = "<group>"; };
+		53FD0D948828275B34683E59 /* ImageClassifierTrainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageClassifierTrainer.swift; sourceTree = "<group>"; };
 		551D4D34DCA73EE04F2B492D /* SecondaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryButton.swift; sourceTree = "<group>"; };
 		598DDF2384BB3AB8BE774DD5 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
 		60706F22693E5FC3EA2A6224 /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
@@ -77,6 +84,7 @@
 		A04FCD158FE7A7D0D56A4E8E /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		A7C172260E6C6D306F982505 /* AchievementEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AchievementEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		AA62D002C72728761229B69A /* AppCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCard.swift; sourceTree = "<group>"; };
+		BFF41C60612B8FEFC2FB365E /* TrainedClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainedClassifier.swift; sourceTree = "<group>"; };
 		C1FEF04E4CE5543F00E63150 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		D2380A2FA9F7AC1B62C231F7 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		D7798308D6AD1B65200D77C3 /* TrainBotTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TrainBotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,6 +93,17 @@
 		F4B1048384090C714C51069D /* MLProjectEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MLProjectEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		F99B82E9FD96E5B628D87842 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4CCA827F8302BE73BDF7AB21 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				57191570E3EAC476EF1BA60A /* CreateMLComponents.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		0126FA6F6436E22CF7CE9996 /* Fonts */ = {
@@ -111,6 +130,14 @@
 				1DE2C022F9A40B49FB5F9A07 /* TrainBotUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		129B18AD465DB7EBF3F0D60F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2DF67461DA0DFB6911F86583 /* CreateMLComponents.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		19FCDEBDF2776727DF5113BC /* Sounds */ = {
@@ -147,6 +174,7 @@
 		82ECEFDAB9C9C244AD3C5B62 /* TrainBotTests */ = {
 			isa = PBXGroup;
 			children = (
+				1F24600AD8935156C7899EFC /* ImageClassifierTrainerTests.swift */,
 				3846FACC22577E376AA40BBD /* ImageStorageTests.swift */,
 				50F93BA5DD9D75BAB43C2092 /* TrainBotTests.swift */,
 			);
@@ -232,6 +260,7 @@
 				9A590448917568ADCEEE92A1 /* TrainBot */,
 				82ECEFDAB9C9C244AD3C5B62 /* TrainBotTests */,
 				AB6C955DE2E0C3B2CD94D2B2 /* TrainBotUITests */,
+				129B18AD465DB7EBF3F0D60F /* Frameworks */,
 				0D5914F28C68359175E0FF23 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -260,6 +289,8 @@
 			isa = PBXGroup;
 			children = (
 				ECCD1C97D1B9A2A5823237B3 /* .gitkeep */,
+				53FD0D948828275B34683E59 /* ImageClassifierTrainer.swift */,
+				BFF41C60612B8FEFC2FB365E /* TrainedClassifier.swift */,
 			);
 			path = ML;
 			sourceTree = "<group>";
@@ -273,6 +304,7 @@
 			buildPhases = (
 				B132FAC0B3F681125D38AA06 /* Sources */,
 				5B48413BC2519843F13E4E97 /* Resources */,
+				4CCA827F8302BE73BDF7AB21 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -388,6 +420,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				516F59F54E85F0F2FD4BD7BD /* ImageClassifierTrainerTests.swift in Sources */,
 				045120D7A79970379FE75F07 /* ImageStorageTests.swift in Sources */,
 				42FF954C65B432CEA9DBC494 /* TrainBotTests.swift in Sources */,
 			);
@@ -401,6 +434,7 @@
 				EB6E8C17D4E6025130C7F095 /* AppCard.swift in Sources */,
 				D16DD6B754434FFEB6FD4C5A /* Colors.swift in Sources */,
 				C1418DA071D52E0CF79DD996 /* DailyChallengeEntity+CoreDataClass.swift in Sources */,
+				B0365B5C530F4F5F3FF0A5AC /* ImageClassifierTrainer.swift in Sources */,
 				24EF475072BE37742AFA76D7 /* ImageStorage.swift in Sources */,
 				13ED790853A7F1320D7A2622 /* MLImageEntity+CoreDataClass.swift in Sources */,
 				DCEA643151DCFE7BDCB9B7B5 /* MLLabelEntity+CoreDataClass.swift in Sources */,
@@ -414,6 +448,7 @@
 				B14A2EF12A5DC75200E81929 /* SecondaryButton.swift in Sources */,
 				5FB03424F1D838F160A69A25 /* TrainBot.xcdatamodeld in Sources */,
 				760230A10568FC9607DE5636 /* TrainBotApp.swift in Sources */,
+				65A016997F7E9B2B320468EE /* TrainedClassifier.swift in Sources */,
 				3CD8A37864304F3787DE6793 /* Typography.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
