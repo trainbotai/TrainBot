@@ -21,6 +21,7 @@
 		450512255A558102ABC0BA1B /* MLProjectEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B1048384090C714C51069D /* MLProjectEntity+CoreDataClass.swift */; };
 		4860FF930B4910EB45ED86D1 /* NavigationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4727A74134DE2E63BF6C61C1 /* NavigationCard.swift */; };
 		4A971B8A2D3494DAE7FF9C8C /* TrainBotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491247C54ADADACE65BECD2C /* TrainBotUITests.swift */; };
+		4BF6A9FB406049AB9B0D3338 /* AchievementsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D85A617924D7FF5E16BEB52 /* AchievementsService.swift */; };
 		4DE5FC5F54B13123643F5799 /* TrainingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F2EF33A84A85ADD9CF39764 /* TrainingViewModel.swift */; };
 		516F59F54E85F0F2FD4BD7BD /* ImageClassifierTrainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F24600AD8935156C7899EFC /* ImageClassifierTrainerTests.swift */; };
 		57191570E3EAC476EF1BA60A /* CreateMLComponents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DF67461DA0DFB6911F86583 /* CreateMLComponents.framework */; };
@@ -85,6 +86,7 @@
 		3263626EBFE10435433CAC66 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		3846FACC22577E376AA40BBD /* ImageStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorageTests.swift; sourceTree = "<group>"; };
 		3ACF6F9734CAB220C92C6D0A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		3D85A617924D7FF5E16BEB52 /* AchievementsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsService.swift; sourceTree = "<group>"; };
 		3DD31D77D62DE71F0390CB49 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		3F1786123EE4863175FEAC89 /* TrainBot.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TrainBot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		425809D7B23FD6232F43F77E /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
@@ -379,6 +381,7 @@
 			isa = PBXGroup;
 			children = (
 				ECCD1C97D1B9A2A5823237B3 /* .gitkeep */,
+				3D85A617924D7FF5E16BEB52 /* AchievementsService.swift */,
 				79A4E18E7126A62D8F0EB819 /* DailyChallengeService.swift */,
 				53FD0D948828275B34683E59 /* ImageClassifierTrainer.swift */,
 				876C6FADA1776CE4DCAE46D5 /* MLProjectRepository.swift */,
@@ -524,6 +527,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B40196BE0A945324A3B6141 /* AchievementEntity+CoreDataClass.swift in Sources */,
+				4BF6A9FB406049AB9B0D3338 /* AchievementsService.swift in Sources */,
 				99DD9F1ADB32A05BE8C774AB /* AchievementsView.swift in Sources */,
 				EB6E8C17D4E6025130C7F095 /* AppCard.swift in Sources */,
 				D16DD6B754434FFEB6FD4C5A /* Colors.swift in Sources */,

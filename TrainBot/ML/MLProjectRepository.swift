@@ -71,6 +71,9 @@ final class MLProjectRepository {
         label.project?.updatedAt = Date()
         try context.save()
         DailyChallengeService(context: context).incrementProgress(by: 1)
+        let req: NSFetchRequest<MLImageEntity> = MLImageEntity.fetchRequest()
+        let total = (try? context.count(for: req)) ?? 0
+        AchievementsService(context: context).recordImagesAdded(total: total)
         return entity
     }
 
@@ -108,6 +111,7 @@ final class MLProjectRepository {
         entity.filename = filename
 
         project.updatedAt = Date()
+        AchievementsService(context: context).recordModelTrained(accuracy: classifier.accuracy)
         try context.save()
         return entity
     }
