@@ -6,6 +6,7 @@ import { env } from './config/index.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { authRouter } from './modules/auth/auth.routes.js';
 import { classesRouter } from './modules/classes/classes.routes.js';
+import { classStudentsRouter, studentsRouter } from './modules/students/students.routes.js';
 
 export function createApp(): Application {
   const app = express();
@@ -33,6 +34,8 @@ export function createApp(): Application {
 
   app.use('/api/v1/auth', authRouter);
   app.use('/api/v1/teacher/classes', classesRouter);
+  app.use('/api/v1/teacher/classes/:classId/students', classStudentsRouter);
+  app.use('/api/v1/teacher/students', studentsRouter);
 
   // 404 fallback
   app.use((req, res) => {
