@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// MARK: - Multi-tenant root
+
+model Tenant {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  plan      Plan     @default(FREE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  teachers Teacher[]
+  classes  Class[]
+
+  @@map("tenants")
+}
+
+enum Plan {
+  FREE
+  PILOT
+  PAID
+}
+
+// MARK: - Teachers
+
+model Teacher {
+  id           String      @id @default(cuid())
+  tenantId     String
+  email        String      @unique
+  passwordHash String
+  name         String
+  role         TeacherRole @default(TEACHER)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  lastLoginAt  DateTime?
+
+  tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  classes       Class[]
+  refreshTokens RefreshToken[]
+
+  @@index([tenantId])
+  @@map("teachers")
+}
+
+enum TeacherRole {
+  TEACHER
+  ADMIN
+}
+
+// MARK: - Classes
+
+model Class {
+  id          String    @id @default(cuid())
+  tenantId    String
+  teacherId   String
+  code        String    @unique
+  name        String
+  description String?
+  archivedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  teacher  Teacher   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  students Student[]
+
+  @@index([tenantId])
+  @@index([teacherId])
+  @@map("classes")
+}
+
+// MARK: - Students
+
+model Student {
+  id           String    @id @default(cuid())
+  tenantId     String
+  classId      String
+  username     String
+  passwordHash String
+  displayName  String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  lastSeenAt   DateTime?
+
+  class         Class          @relation(fields: [classId], references: [id], onDelete: Cascade)
+  refreshTokens RefreshToken[]
+
+  @@unique([classId, username])
+  @@index([tenantId])
+  @@map("students")
+}
+
+// MARK: - Refresh tokens (unified storage for teacher + student)
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  teacherId String?
+  studentId String?
+  expiresAt DateTime
+  createdAt DateTime  @default(now())
+  revokedAt DateTime?
+
+  teacher Teacher? @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  student Student? @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([teacherId])
+  @@index([studentId])
+  @@map("refresh_tokens")
+}
