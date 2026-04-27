@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: trainbot-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: trainbot
+      POSTGRES_PASSWORD: trainbot_dev_password
+      POSTGRES_DB: trainbot_dev
+    ports:
+      - "5433:5432"
+    volumes:
+      - trainbot_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U trainbot -d trainbot_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  trainbot_postgres_data:
+    driver: local
