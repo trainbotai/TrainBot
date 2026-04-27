@@ -53,9 +53,7 @@ final class ImageClassifierTrainer {
 
         let trainedModel: ComposedTransformer<ImageFeaturePrint, FullyConnectedNetworkClassifierModel<Float, String>>
         do {
-            trainedModel = try await Task.detached(priority: .userInitiated) {
-                try await pipeline.fitted(to: annotatedFeatures)
-            }.value
+            trainedModel = try await pipeline.fitted(to: annotatedFeatures)
         } catch {
             throw TrainerError.trainingFailed(error)
         }

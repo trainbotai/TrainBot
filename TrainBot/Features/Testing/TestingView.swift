@@ -80,8 +80,9 @@ struct TestingView: View {
                 }
             }
 
+            let pickerLabelText = vm.testImage == nil ? "Alege poza" : "Alta poza"
             PhotosPicker(selection: $pickerItem, matching: .images) {
-                Text(vm.testImage == nil ? "Alege poza" : "Alta poza")
+                Text(pickerLabelText)
                     .font(AppFont.buttonLarge())
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
