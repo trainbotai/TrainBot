@@ -52,6 +52,7 @@ struct TestingView: View {
         }
     }
 
+    @MainActor
     private var tester: some View {
         VStack(spacing: 16) {
             HStack {

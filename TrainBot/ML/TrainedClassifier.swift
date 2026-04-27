@@ -1,7 +1,7 @@
 import Foundation
 import CoreML
 import UIKit
-import Vision
+@preconcurrency import Vision
 
 struct TrainedClassifier {
     let model: MLModel
@@ -20,25 +20,18 @@ struct TrainedClassifier {
         guard let cgImage = image.cgImage else {
             throw NSError(domain: "TrainedClassifier", code: 1, userInfo: [NSLocalizedDescriptionKey: "Cannot get CGImage"])
         }
-        return try await withCheckedThrowingContinuation { continuation in
-            let request = VNCoreMLRequest(model: visionModel) { request, error in
-                if let error {
-                    continuation.resume(throwing: error)
-                    return
-                }
-                guard let results = request.results as? [VNClassificationObservation], let top = results.first else {
-                    continuation.resume(throwing: NSError(domain: "TrainedClassifier", code: 2))
-                    return
-                }
-                var all: [String: Double] = [:]
-                for r in results { all[r.identifier] = Double(r.confidence) }
-                continuation.resume(returning: Prediction(label: top.identifier, confidence: Double(top.confidence), allConfidences: all))
-            }
+        let model = visionModel
+        return try await Task.detached(priority: .userInitiated) {
+            let request = VNCoreMLRequest(model: model)
             request.imageCropAndScaleOption = .centerCrop
             let handler = VNImageRequestHandler(cgImage: cgImage)
-            DispatchQueue.global(qos: .userInitiated).async {
-                do { try handler.perform([request]) } catch { continuation.resume(throwing: error) }
+            try handler.perform([request])
+            guard let results = request.results as? [VNClassificationObservation], let top = results.first else {
+                throw NSError(domain: "TrainedClassifier", code: 2)
             }
-        }
+            var all: [String: Double] = [:]
+            for r in results { all[r.identifier] = Double(r.confidence) }
+            return Prediction(label: top.identifier, confidence: Double(top.confidence), allConfidences: all)
+        }.value
     }
 }

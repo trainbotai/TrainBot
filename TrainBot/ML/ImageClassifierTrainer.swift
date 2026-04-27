@@ -1,5 +1,5 @@
 import Foundation
-import CreateMLComponents
+@preconcurrency import CreateMLComponents
 import CoreImage
 import CoreML
 import UIKit
