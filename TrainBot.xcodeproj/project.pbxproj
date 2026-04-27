@@ -12,6 +12,7 @@
 		07F840708D888B3051C45E39 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FEF04E4CE5543F00E63150 /* PersistenceController.swift */; };
 		13ED790853A7F1320D7A2622 /* MLImageEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EACAB1276B8F0040D6398CFD /* MLImageEntity+CoreDataClass.swift */; };
 		1B27FF9AF8C2B10C64B2407B /* DailyChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15DEC4F5BAFCE09EB6C035B /* DailyChallengeView.swift */; };
+		2103DD8E82658EF02F7790FB /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A68B563C31FB9CE6CDC286 /* OnboardingView.swift */; };
 		22638E5F9937C0E8D3A677F3 /* DailyChallengeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A4E18E7126A62D8F0EB819 /* DailyChallengeService.swift */; };
 		24EF475072BE37742AFA76D7 /* ImageStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2776CE1D4D652C47DA2DBD88 /* ImageStorage.swift */; };
 		2550CA737C6685FA4207A122 /* TestingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20114F5CF592023B77A4ACD8 /* TestingView.swift */; };
@@ -83,6 +84,7 @@
 		2776CE1D4D652C47DA2DBD88 /* ImageStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorage.swift; sourceTree = "<group>"; };
 		2DF67461DA0DFB6911F86583 /* CreateMLComponents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CreateMLComponents.framework; path = System/Library/Frameworks/CreateMLComponents.framework; sourceTree = SDKROOT; };
 		30345DCA5575F2DD7B6E87A8 /* TrainBotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainBotApp.swift; sourceTree = "<group>"; };
+		30A68B563C31FB9CE6CDC286 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		3263626EBFE10435433CAC66 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		3846FACC22577E376AA40BBD /* ImageStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorageTests.swift; sourceTree = "<group>"; };
 		3ACF6F9734CAB220C92C6D0A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -132,6 +134,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		003F96334434E62F899304FE /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				30A68B563C31FB9CE6CDC286 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		0126FA6F6436E22CF7CE9996 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -147,6 +157,7 @@
 				F18A1BB35CBD3176741E36CB /* DailyChallenge */,
 				B145C69BBE5A9E1913FFD6DD /* Home */,
 				5DA0DC4AF43041244365548E /* Knowledge */,
+				003F96334434E62F899304FE /* Onboarding */,
 				B44AF1ADB809BF79F0E8BC9E /* Settings */,
 				40066B54322E44463421EE69 /* Testing */,
 				3287FFFF4848E35C44718F26 /* Training */,
@@ -546,6 +557,7 @@
 				04033740F3E345DB415A749F /* MascotState.swift in Sources */,
 				C85D17E355F8F636A270BE08 /* MascotView.swift in Sources */,
 				4860FF930B4910EB45ED86D1 /* NavigationCard.swift in Sources */,
+				2103DD8E82658EF02F7790FB /* OnboardingView.swift in Sources */,
 				07F840708D888B3051C45E39 /* PersistenceController.swift in Sources */,
 				CCF7F8383A6071CF892AF6D1 /* PrimaryButton.swift in Sources */,
 				B14A2EF12A5DC75200E81929 /* SecondaryButton.swift in Sources */,
