@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto';
 import jwt from 'jsonwebtoken';
 import { env } from '../config/index.js';
 
@@ -26,6 +27,7 @@ export function signRefreshToken(payload: RefreshTokenPayload): string {
     expiresIn: env.JWT_REFRESH_EXPIRES_IN,
     issuer: 'trainbot',
     audience: 'trainbot-clients',
+    jwtid: randomBytes(16).toString('hex'),
   } as jwt.SignOptions);
 }
 
