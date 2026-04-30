@@ -38,6 +38,7 @@ fastlane/test_output
 
 # Secrets
 .env
+.secrets/
 *.p8
 *.p12
 *.mobileprovision

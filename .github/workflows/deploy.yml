@@ -1,0 +1,105 @@
+name: Deploy to production
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/**'
+      - 'web/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      web: ${{ steps.filter.outputs.web }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+            web:
+              - 'web/**'
+
+  deploy-backend:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.backend == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.TRAINBOT_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.TRAINBOT_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy backend
+        run: |
+          ssh -i ~/.ssh/id_ed25519 deploy@${{ secrets.TRAINBOT_HOST }} bash <<'REMOTE'
+            set -euo pipefail
+            cd /opt/trainbot
+            git fetch origin
+            git checkout main
+            git pull --ff-only
+            cd backend
+            npm ci
+            npx prisma migrate deploy
+            npx prisma generate
+            npm run build
+            pm2 restart trainbot-api --update-env
+            pm2 save
+          REMOTE
+
+      - name: Smoke test
+        run: |
+          sleep 5
+          curl -fsS https://trainbot.perpetuummobile.tech/health | tee /dev/stderr | grep -q '"status":"ok"'
+
+  deploy-web:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.web == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: web/package-lock.json
+
+      - name: Build web
+        working-directory: web
+        run: |
+          echo "VITE_API_URL=${{ secrets.TRAINBOT_API_URL }}" > .env.production
+          npm ci
+          npm run build
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.TRAINBOT_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.TRAINBOT_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy static
+        run: |
+          rsync -avz --delete --rsync-path="sudo rsync" -e "ssh -i ~/.ssh/id_ed25519" \
+            web/dist/ deploy@${{ secrets.TRAINBOT_HOST }}:/var/www/trainbot/
+          ssh -i ~/.ssh/id_ed25519 deploy@${{ secrets.TRAINBOT_HOST }} \
+            'sudo chown -R www-data:www-data /var/www/trainbot'
+
+      - name: Smoke test
+        run: |
+          curl -fsSI https://trainbot.perpetuummobile.tech/ | head -1 | grep -q '200 OK'
