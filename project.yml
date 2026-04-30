@@ -49,6 +49,8 @@ targets:
         NSCameraUsageDescription: "TrainBot foloseste camera pentru a face poze de antrenament pentru AI-ul tau."
         NSPhotoLibraryUsageDescription: "TrainBot acceseaza galeria pentru a importa poze de antrenament."
         ITSAppUsesNonExemptEncryption: false
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.luca.trainbot.TrainBot
