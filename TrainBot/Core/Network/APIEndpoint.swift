@@ -12,7 +12,11 @@ struct APIEndpoint {
     let path: String
     let body: (any Encodable)?
 
+    #if DEBUG
     static let baseURL = "http://localhost:3000/api/v1"
+    #else
+    static let baseURL = "https://trainbot.perpetuummobile.tech/api/v1"
+    #endif
 
     func urlRequest() throws -> URLRequest {
         guard let url = URL(string: Self.baseURL + path) else {
