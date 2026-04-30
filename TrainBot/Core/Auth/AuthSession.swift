@@ -2,6 +2,7 @@ import Foundation
 import Observation
 
 @Observable
+@MainActor
 final class AuthSession {
     private(set) var currentUser: AuthUser?
     private(set) var accessToken: String?
