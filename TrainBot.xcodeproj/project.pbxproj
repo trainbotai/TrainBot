@@ -30,6 +30,7 @@
 		65A016997F7E9B2B320468EE /* TrainedClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF41C60612B8FEFC2FB365E /* TrainedClassifier.swift */; };
 		68A088C399E82B72279B1120 /* KnowledgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE23539C8D2BB1A5786367A /* KnowledgeView.swift */; };
 		6B40196BE0A945324A3B6141 /* AchievementEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C172260E6C6D306F982505 /* AchievementEntity+CoreDataClass.swift */; };
+		7203ABCC0F093620DD10F72B /* AuthModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D330132C0574C626ADD232 /* AuthModels.swift */; };
 		760230A10568FC9607DE5636 /* TrainBotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30345DCA5575F2DD7B6E87A8 /* TrainBotApp.swift */; };
 		81D50D4033609FC571999BCB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACF6F9734CAB220C92C6D0A /* SettingsView.swift */; };
 		86CAC50B05799CA78720B924 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306B67358AD0279BF5EA247 /* HomeView.swift */; };
@@ -47,6 +48,7 @@
 		E6B3027A65EA05ABF326A92E /* TestingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D95F4A28387BBEF2893452E /* TestingViewModel.swift */; };
 		EB6E8C17D4E6025130C7F095 /* AppCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA62D002C72728761229B69A /* AppCard.swift */; };
 		FF412E8A0EE5C45CEA5EE653 /* MLProjectRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0FA3A5FBA413526C828CBC0 /* MLProjectRepositoryTests.swift */; };
+		FF4F2D01AF99739580BC1102 /* AuthModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DB0DE6012668B4B1565CC2 /* AuthModelsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,6 +110,7 @@
 		876C6FADA1776CE4DCAE46D5 /* MLProjectRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLProjectRepository.swift; sourceTree = "<group>"; };
 		97B32648FA627BD8B6E09B62 /* TrainBot.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrainBot.xcdatamodel; sourceTree = "<group>"; };
 		A04FCD158FE7A7D0D56A4E8E /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		A1D330132C0574C626ADD232 /* AuthModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthModels.swift; sourceTree = "<group>"; };
 		A7C172260E6C6D306F982505 /* AchievementEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AchievementEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		AA62D002C72728761229B69A /* AppCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCard.swift; sourceTree = "<group>"; };
 		B15DEC4F5BAFCE09EB6C035B /* DailyChallengeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyChallengeView.swift; sourceTree = "<group>"; };
@@ -115,6 +118,7 @@
 		C0FA3A5FBA413526C828CBC0 /* MLProjectRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLProjectRepositoryTests.swift; sourceTree = "<group>"; };
 		C1FEF04E4CE5543F00E63150 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		D2380A2FA9F7AC1B62C231F7 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		D6DB0DE6012668B4B1565CC2 /* AuthModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthModelsTests.swift; sourceTree = "<group>"; };
 		D7798308D6AD1B65200D77C3 /* TrainBotTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TrainBotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EACAB1276B8F0040D6398CFD /* MLImageEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MLImageEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		ECCD1C97D1B9A2A5823237B3 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
@@ -192,6 +196,14 @@
 			path = Sounds;
 			sourceTree = "<group>";
 		};
+		25AD798B73AD7B9199B20CFD /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				6D82B62CD6EA0A99A122842A /* Auth */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
 		3287FFFF4848E35C44718F26 /* Training */ = {
 			isa = PBXGroup;
 			children = (
@@ -228,6 +240,14 @@
 			path = Mascot;
 			sourceTree = "<group>";
 		};
+		6D82B62CD6EA0A99A122842A /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				D6DB0DE6012668B4B1565CC2 /* AuthModelsTests.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		81F60F3127149CA695FE5FF6 /* Generated */ = {
 			isa = PBXGroup;
 			children = (
@@ -244,6 +264,7 @@
 		82ECEFDAB9C9C244AD3C5B62 /* TrainBotTests */ = {
 			isa = PBXGroup;
 			children = (
+				25AD798B73AD7B9199B20CFD /* Core */,
 				1F24600AD8935156C7899EFC /* ImageClassifierTrainerTests.swift */,
 				3846FACC22577E376AA40BBD /* ImageStorageTests.swift */,
 				C0FA3A5FBA413526C828CBC0 /* MLProjectRepositoryTests.swift */,
@@ -275,6 +296,7 @@
 		977C570B52B19EBFAD7FE370 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				EEB7F695131F1D0823543FD3 /* Auth */,
 				EE84BE002C9D0234608A2F2E /* Network */,
 				A557CA7C4A72106F33D95F4C /* Storage */,
 			);
@@ -378,6 +400,14 @@
 				0CA382BC68A350154C9975D3 /* .gitkeep */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		EEB7F695131F1D0823543FD3 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				A1D330132C0574C626ADD232 /* AuthModels.swift */,
+			);
+			path = Auth;
 			sourceTree = "<group>";
 		};
 		F18A1BB35CBD3176741E36CB /* DailyChallenge */ = {
@@ -526,6 +556,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF4F2D01AF99739580BC1102 /* AuthModelsTests.swift in Sources */,
 				516F59F54E85F0F2FD4BD7BD /* ImageClassifierTrainerTests.swift in Sources */,
 				045120D7A79970379FE75F07 /* ImageStorageTests.swift in Sources */,
 				FF412E8A0EE5C45CEA5EE653 /* MLProjectRepositoryTests.swift in Sources */,
@@ -541,6 +572,7 @@
 				4BF6A9FB406049AB9B0D3338 /* AchievementsService.swift in Sources */,
 				99DD9F1ADB32A05BE8C774AB /* AchievementsView.swift in Sources */,
 				EB6E8C17D4E6025130C7F095 /* AppCard.swift in Sources */,
+				7203ABCC0F093620DD10F72B /* AuthModels.swift in Sources */,
 				D16DD6B754434FFEB6FD4C5A /* Colors.swift in Sources */,
 				C1418DA071D52E0CF79DD996 /* DailyChallengeEntity+CoreDataClass.swift in Sources */,
 				22638E5F9937C0E8D3A677F3 /* DailyChallengeService.swift in Sources */,
@@ -613,6 +645,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -630,6 +663,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -708,6 +742,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -725,6 +760,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
