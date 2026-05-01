@@ -27,6 +27,16 @@ export default function Layout() {
       <main className="flex-1 max-w-6xl mx-auto w-full px-6 py-8">
         <Outlet />
       </main>
+      <footer className="border-t border-gray-200 bg-white py-4">
+        <div className="max-w-6xl mx-auto px-6 text-center text-xs text-text-secondary">
+          © 2026 TrainBot ·{' '}
+          <Link to="/privacy" className="hover:underline">Confidențialitate</Link>
+          {' · '}
+          <Link to="/terms" className="hover:underline">Termeni</Link>
+          {' · '}
+          <Link to="/dpa" className="hover:underline">DPA</Link>
+        </div>
+      </footer>
     </div>
   )
 }

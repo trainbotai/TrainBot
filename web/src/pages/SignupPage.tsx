@@ -78,6 +78,12 @@ export default function SignupPage() {
             Intră
           </Link>
         </p>
+        <p className="text-center text-xs text-text-secondary pt-2">
+          Prin crearea contului, accept{' '}
+          <Link to="/terms" className="text-primary-purple hover:underline" target="_blank">Termenii</Link>
+          {' '}și{' '}
+          <Link to="/privacy" className="text-primary-purple hover:underline" target="_blank">Politica de confidențialitate</Link>.
+        </p>
       </form>
     </div>
   )
