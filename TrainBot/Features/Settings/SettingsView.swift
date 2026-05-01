@@ -5,6 +5,14 @@ struct SettingsView: View {
     @AppStorage("soundEnabled") private var soundEnabled = true
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = true
     @Environment(AuthSession.self) private var authSession
+    @Environment(MLSyncService.self) private var mlSync
+
+    private var lastSyncText: String {
+        guard let date = mlSync.lastSyncedAt else { return "niciodată" }
+        let f = RelativeDateTimeFormatter()
+        f.unitsStyle = .short
+        return f.localizedString(for: date, relativeTo: Date())
+    }
 
     var body: some View {
         Form {
@@ -26,6 +34,26 @@ struct SettingsView: View {
                 Button("Deconectare", role: .destructive) {
                     Task { await authSession.logout() }
                 }
+            }
+            Section("Sincronizare") {
+                HStack {
+                    Text("Ultima sincronizare")
+                    Spacer()
+                    Text(lastSyncText).foregroundStyle(.secondary).font(.caption)
+                }
+                if let err = mlSync.lastError {
+                    Text(err).font(.caption).foregroundStyle(.red)
+                }
+                Button {
+                    Task { await mlSync.syncAll() }
+                } label: {
+                    HStack {
+                        Text(mlSync.isSyncing ? "Se sincronizează..." : "Sincronizează acum")
+                        Spacer()
+                        if mlSync.isSyncing { ProgressView() }
+                    }
+                }
+                .disabled(mlSync.isSyncing || !authSession.isAuthenticated)
             }
             Section("Legal") {
                 Link("Politică de confidențialitate", destination: URL(string: "https://trainbot.perpetuummobile.tech/privacy")!)

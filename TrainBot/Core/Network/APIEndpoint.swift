@@ -55,4 +55,23 @@ extension APIEndpoint {
         struct Body: Encodable { let refreshToken: String }
         return Self(method: .post, path: "/auth/logout", body: Body(refreshToken: token))
     }
+
+    static func syncMLProject(_ payload: MLProjectSyncPayload) -> Self {
+        return Self(method: .post, path: "/student/ml/projects", body: payload)
+    }
+}
+
+struct MLLabelSyncPayload: Encodable {
+    let clientId: String
+    let name: String
+    let imageCount: Int
+}
+
+struct MLProjectSyncPayload: Encodable {
+    let clientId: String
+    let name: String
+    let modelTrained: Bool
+    let modelVersion: Int
+    let trainedAt: String?
+    let labels: [MLLabelSyncPayload]
 }
