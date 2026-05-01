@@ -132,10 +132,28 @@ model MLLabel {
   updatedAt  DateTime @updatedAt
 
   project MLProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  images  MLImage[]
 
   @@unique([projectId, clientId])
   @@index([projectId])
   @@map("ml_labels")
+}
+
+model MLImage {
+  id        String   @id @default(cuid())
+  labelId   String
+  clientId  String   // UUID from iOS for idempotent upload
+  filename  String   // path on disk relative to upload root
+  sizeBytes Int
+  width     Int?
+  height    Int?
+  createdAt DateTime @default(now())
+
+  label MLLabel @relation(fields: [labelId], references: [id], onDelete: Cascade)
+
+  @@unique([labelId, clientId])
+  @@index([labelId])
+  @@map("ml_images")
 }
 
 // MARK: - Refresh tokens (unified storage for teacher + student)

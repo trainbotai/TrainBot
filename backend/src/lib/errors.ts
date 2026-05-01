@@ -51,3 +51,10 @@ export class TooManyRequestsError extends AppError {
     this.name = 'TooManyRequestsError';
   }
 }
+
+export class BadRequestError extends AppError {
+  constructor(detail: string) {
+    super(400, 'bad_request', 'Bad request', detail);
+    this.name = 'BadRequestError';
+  }
+}

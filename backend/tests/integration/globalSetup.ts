@@ -1,7 +1,11 @@
 import { GenericContainer, Wait, type StartedTestContainer } from 'testcontainers';
 import { execSync } from 'node:child_process';
+import os from 'node:os';
+import path from 'node:path';
+import fs from 'node:fs/promises';
 
 let container: StartedTestContainer | undefined;
+let tmpUploadDir: string | undefined;
 
 export async function setup() {
   container = await new GenericContainer('postgres:16-alpine')
@@ -24,6 +28,10 @@ export async function setup() {
   process.env.RATE_LIMIT_MAX = '10000';
   process.env.LOG_LEVEL = 'fatal';
 
+  tmpUploadDir = path.join(os.tmpdir(), `trainbot-test-uploads-${Date.now()}`);
+  await fs.mkdir(tmpUploadDir, { recursive: true });
+  process.env.UPLOAD_DIR = tmpUploadDir;
+
   execSync('npx prisma migrate deploy', {
     stdio: 'inherit',
     env: { ...process.env, DATABASE_URL: url },
@@ -33,5 +41,6 @@ export async function setup() {
   // (provideEnv is the Vitest API for this)
   return async () => {
     if (container) await container.stop();
+    if (tmpUploadDir) await fs.rm(tmpUploadDir, { recursive: true, force: true });
   };
 }
