@@ -8,6 +8,7 @@ import StudentRow from '../components/StudentRow'
 import AddStudentModal from '../components/AddStudentModal'
 import BulkAddStudentsModal from '../components/BulkAddStudentsModal'
 import EditClassModal from '../components/EditClassModal'
+import ClassMLProjects from '../components/ClassMLProjects'
 
 export default function ClassDetailPage() {
   const { classId } = useParams<{ classId: string }>()
@@ -74,6 +75,11 @@ export default function ClassDetailPage() {
           </table>
         )}
       </div>
+
+      <section className="mt-8">
+        <h2 className="font-bold text-text-primary mb-3">Lucrul elevilor (proiecte ML)</h2>
+        <ClassMLProjects classId={classId!} />
+      </section>
 
       <AddStudentModal open={openAddStudent} onClose={() => setOpenAddStudent(false)} classId={classId!} />
       <BulkAddStudentsModal open={openBulk} onClose={() => setOpenBulk(false)} classId={classId!} />
