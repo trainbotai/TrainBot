@@ -92,10 +92,50 @@ model Student {
 
   class         Class          @relation(fields: [classId], references: [id], onDelete: Cascade)
   refreshTokens RefreshToken[]
+  mlProjects    MLProject[]
 
   @@unique([classId, username])
   @@index([tenantId])
   @@map("students")
+}
+
+// MARK: - ML Projects (synced from iOS, metadata only — Phase 2A)
+
+model MLProject {
+  id           String    @id @default(cuid())
+  tenantId     String
+  studentId    String
+  clientId     String    // UUID generated on iOS device, used for idempotent sync
+  name         String
+  modelTrained Boolean   @default(false)
+  modelVersion Int       @default(0)
+  trainedAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  student Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  labels  MLLabel[]
+
+  @@unique([studentId, clientId])
+  @@index([tenantId])
+  @@index([studentId])
+  @@map("ml_projects")
+}
+
+model MLLabel {
+  id         String   @id @default(cuid())
+  projectId  String
+  clientId   String   // UUID from iOS
+  name       String
+  imageCount Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  project MLProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, clientId])
+  @@index([projectId])
+  @@map("ml_labels")
 }
 
 // MARK: - Refresh tokens (unified storage for teacher + student)
