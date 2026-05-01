@@ -27,6 +27,10 @@ struct SettingsView: View {
                     Task { await authSession.logout() }
                 }
             }
+            Section("Legal") {
+                Link("Politică de confidențialitate", destination: URL(string: "https://trainbot.perpetuummobile.tech/privacy")!)
+                Link("Termeni și Condiții", destination: URL(string: "https://trainbot.perpetuummobile.tech/terms")!)
+            }
             Section("Despre") {
                 Text("TrainBot v1.0.0 (Faza 1B)")
                 Text("Facut cu drag pentru Crocorobo")
