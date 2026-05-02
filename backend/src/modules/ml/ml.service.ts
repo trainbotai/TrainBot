@@ -99,6 +99,65 @@ export async function deleteOwnProject(opts: {
   await Promise.all(filesToDelete.map((f) => deleteImage(f).catch(() => undefined)));
 }
 
+// Teacher: full detail page for one student (info + stats + projects with images)
+export async function teacherStudentDetail(opts: {
+  teacherId: string;
+  tenantId: string;
+  studentId: string;
+}) {
+  const student = await db.student.findFirst({
+    where: {
+      id: opts.studentId,
+      tenantId: opts.tenantId,
+      class: { teacherId: opts.teacherId },
+    },
+    select: {
+      id: true,
+      username: true,
+      displayName: true,
+      createdAt: true,
+      lastSeenAt: true,
+      class: { select: { id: true, code: true, name: true } },
+    },
+  });
+  if (!student) throw new NotFoundError('student');
+
+  const [projects, totalImages] = await Promise.all([
+    db.mLProject.findMany({
+      where: { studentId: opts.studentId },
+      orderBy: { updatedAt: 'desc' },
+      include: {
+        labels: {
+          select: {
+            id: true,
+            name: true,
+            imageCount: true,
+            images: { select: { id: true, createdAt: true }, take: 12, orderBy: { createdAt: 'desc' } },
+          },
+          orderBy: { createdAt: 'asc' },
+        },
+      },
+    }),
+    db.mLImage.count({
+      where: { label: { project: { studentId: opts.studentId } } },
+    }),
+  ]);
+
+  const trainedCount = projects.filter((p) => p.modelTrained).length;
+  const labelCount = projects.reduce((s, p) => s + p.labels.length, 0);
+
+  return {
+    student,
+    stats: {
+      projectCount: projects.length,
+      trainedModelCount: trainedCount,
+      labelCount,
+      totalImages,
+    },
+    projects,
+  };
+}
+
 // Teacher: list projects for one of their students (multi-tenant safe)
 export async function teacherListStudentProjects(opts: {
   teacherId: string;

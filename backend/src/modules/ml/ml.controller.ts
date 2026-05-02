@@ -49,6 +49,17 @@ export async function teacherListStudentProjects(req: Request, res: Response, ne
   } catch (e) { next(e); }
 }
 
+export async function teacherStudentDetail(req: Request, res: Response, next: NextFunction) {
+  try {
+    const ctx = requireTeacher(req);
+    const data = await svc.teacherStudentDetail({
+      ...ctx,
+      studentId: req.params['studentId'] as string,
+    });
+    res.json(data);
+  } catch (e) { next(e); }
+}
+
 export async function teacherStats(req: Request, res: Response, next: NextFunction) {
   try {
     const ctx = requireTeacher(req);
