@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { apiFetch, ApiError } from '../lib/api'
 import { useAuthStore } from '../auth/authStore'
@@ -66,12 +67,12 @@ export default function ClassMLProjects({ classId }: { classId: string }) {
         return (
           <div key={studentId} className="bg-white rounded-xl border border-gray-200 p-4">
             <div className="flex items-center justify-between mb-3">
-              <div>
-                <h3 className="font-semibold text-text-primary">
-                  {s.displayName ?? s.username}
+              <Link to={`/students/${studentId}`} className="group">
+                <h3 className="font-semibold text-text-primary group-hover:text-primary-purple transition">
+                  {s.displayName ?? s.username} →
                 </h3>
                 <p className="text-xs text-text-secondary font-mono">@{s.username}</p>
-              </div>
+              </Link>
               <p className="text-xs text-text-secondary">
                 {projects.length} {projects.length === 1 ? 'proiect' : 'proiecte'} ·{' '}
                 {totalImages} imagini

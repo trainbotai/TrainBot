@@ -28,6 +28,12 @@ teacherMlRouter.use(requireAuth, requireRole('teacher'));
 teacherMlRouter.get('/stats', ctrl.teacherStats);
 
 teacherMlRouter.get(
+  '/students/:studentId/detail',
+  validate(teacherStudentParam),
+  ctrl.teacherStudentDetail,
+);
+
+teacherMlRouter.get(
   '/students/:studentId/ml-projects',
   validate(teacherStudentParam),
   ctrl.teacherListStudentProjects,
