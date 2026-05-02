@@ -23,6 +23,11 @@ const envSchema = z.object({
   UPLOAD_DIR: z.string().default('/var/uploads/trainbot'),
   UPLOAD_MAX_BYTES: z.coerce.number().int().positive().default(5 * 1024 * 1024),
   UPLOAD_MAX_DIMENSION: z.coerce.number().int().positive().default(1024),
+
+  // Email notifications (optional — if RESEND_API_KEY is missing, emails are logged not sent)
+  RESEND_API_KEY: z.string().optional(),
+  EMAIL_FROM: z.string().default('TrainBot <onboarding@resend.dev>'),
+  PUBLIC_WEB_URL: z.string().default('https://trainbot.perpetuummobile.tech'),
 });
 
 const parsed = envSchema.safeParse(process.env);

@@ -1,6 +1,8 @@
 import { db } from '../../lib/db.js';
 import { NotFoundError, ForbiddenError } from '../../lib/errors.js';
 import type { SyncProjectBody } from './ml.schemas.js';
+import { notifyTeacherFirstStudentSync } from '../../services/emailService.js';
+import { logger } from '../../lib/logger.js';
 
 // Student: list own projects
 export async function listOwnProjects(opts: { studentId: string; tenantId: string }) {
@@ -24,7 +26,10 @@ export async function syncProject(opts: {
 }) {
   const { studentId, tenantId, body } = opts;
 
-  return db.$transaction(async (tx) => {
+  // Detect first sync (before any project exists for this student) for email notification
+  const isFirstSync = (await db.mLProject.count({ where: { studentId } })) === 0;
+
+  const result = await db.$transaction(async (tx) => {
     const project = await tx.mLProject.upsert({
       where: { studentId_clientId: { studentId, clientId: body.clientId } },
       update: {
@@ -76,6 +81,33 @@ export async function syncProject(opts: {
         },
       },
     });
+  });
+
+  // Fire-and-forget email on first sync (don't block sync response)
+  if (isFirstSync) {
+    notifyOnFirstSync(studentId).catch((err) =>
+      logger.error({ err, studentId }, 'first-sync notification failed'),
+    );
+  }
+
+  return result;
+}
+
+async function notifyOnFirstSync(studentId: string) {
+  const student = await db.student.findUnique({
+    where: { id: studentId },
+    select: {
+      displayName: true,
+      username: true,
+      class: { select: { name: true, teacher: { select: { email: true, name: true } } } },
+    },
+  });
+  if (!student) return;
+  await notifyTeacherFirstStudentSync({
+    teacherEmail: student.class.teacher.email,
+    teacherName: student.class.teacher.name,
+    studentName: student.displayName ?? student.username,
+    className: student.class.name,
   });
 }
 
