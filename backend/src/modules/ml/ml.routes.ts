@@ -25,6 +25,8 @@ studentMlRouter.delete('/images/:imageId', imageCtrl.deleteImage);
 export const teacherMlRouter = Router();
 teacherMlRouter.use(requireAuth, requireRole('teacher'));
 
+teacherMlRouter.get('/stats', ctrl.teacherStats);
+
 teacherMlRouter.get(
   '/students/:studentId/ml-projects',
   validate(teacherStudentParam),

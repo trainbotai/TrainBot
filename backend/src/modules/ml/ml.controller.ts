@@ -49,6 +49,14 @@ export async function teacherListStudentProjects(req: Request, res: Response, ne
   } catch (e) { next(e); }
 }
 
+export async function teacherStats(req: Request, res: Response, next: NextFunction) {
+  try {
+    const ctx = requireTeacher(req);
+    const data = await svc.teacherStats(ctx);
+    res.json(data);
+  } catch (e) { next(e); }
+}
+
 export async function teacherListClassProjects(req: Request, res: Response, next: NextFunction) {
   try {
     const ctx = requireTeacher(req);

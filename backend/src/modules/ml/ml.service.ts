@@ -84,12 +84,19 @@ export async function deleteOwnProject(opts: {
   studentId: string;
   projectId: string;
 }) {
-  const project = await db.mLProject.findUnique({ where: { id: opts.projectId } });
+  const project = await db.mLProject.findUnique({
+    where: { id: opts.projectId },
+    include: { labels: { include: { images: { select: { filename: true } } } } },
+  });
   if (!project) throw new NotFoundError('project');
   if (project.studentId !== opts.studentId) {
     throw new ForbiddenError('Not your project');
   }
+  const filesToDelete = project.labels.flatMap((l) => l.images.map((i) => i.filename));
   await db.mLProject.delete({ where: { id: opts.projectId } });
+  // Best-effort disk cleanup (don't fail the API call if a file is missing)
+  const { deleteImage } = await import('./image.storage.js');
+  await Promise.all(filesToDelete.map((f) => deleteImage(f).catch(() => undefined)));
 }
 
 // Teacher: list projects for one of their students (multi-tenant safe)
@@ -117,6 +124,48 @@ export async function teacherListStudentProjects(opts: {
       },
     },
   });
+}
+
+// Teacher: aggregated stats across all their classes
+export async function teacherStats(opts: { teacherId: string; tenantId: string }) {
+  const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+  const [classCount, studentCount, projectAgg, imagesIn24h, lastSync] = await Promise.all([
+    db.class.count({
+      where: { teacherId: opts.teacherId, tenantId: opts.tenantId, archivedAt: null },
+    }),
+    db.student.count({
+      where: { tenantId: opts.tenantId, class: { teacherId: opts.teacherId, archivedAt: null } },
+    }),
+    db.mLProject.aggregate({
+      where: { tenantId: opts.tenantId, student: { class: { teacherId: opts.teacherId } } },
+      _count: { id: true },
+    }),
+    db.mLImage.count({
+      where: {
+        createdAt: { gte: since24h },
+        label: {
+          project: {
+            tenantId: opts.tenantId,
+            student: { class: { teacherId: opts.teacherId } },
+          },
+        },
+      },
+    }),
+    db.mLProject.findFirst({
+      where: { tenantId: opts.tenantId, student: { class: { teacherId: opts.teacherId } } },
+      orderBy: { updatedAt: 'desc' },
+      select: { updatedAt: true, student: { select: { username: true, displayName: true } } },
+    }),
+  ]);
+
+  return {
+    classCount,
+    studentCount,
+    projectCount: projectAgg._count.id,
+    imagesLast24h: imagesIn24h,
+    lastSync,
+  };
 }
 
 // Teacher: list projects for entire class (aggregated overview)

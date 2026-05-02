@@ -63,3 +63,14 @@ export interface ClassMLProject {
   student: { id: string; username: string; displayName: string | null }
   labels: MLLabelSummary[]
 }
+
+export interface TeacherStats {
+  classCount: number
+  studentCount: number
+  projectCount: number
+  imagesLast24h: number
+  lastSync: {
+    updatedAt: string
+    student: { username: string; displayName: string | null }
+  } | null
+}
