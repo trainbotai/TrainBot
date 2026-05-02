@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { apiFetch, ApiError } from '../lib/api'
 import { useAuthStore } from '../auth/authStore'
 import type { ClassMLProject } from '../lib/types'
+import AuthenticatedImage from './AuthenticatedImage'
 
 function relativeTime(iso: string): string {
   const diffMs = Date.now() - new Date(iso).getTime()
@@ -88,14 +89,28 @@ export default function ClassMLProjects({ classId }: { classId: string }) {
                     </div>
                   </div>
                   {p.labels.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mt-1">
+                    <div className="mt-2 space-y-2">
                       {p.labels.map((l) => (
-                        <span
-                          key={l.name}
-                          className="bg-surface-light text-text-secondary text-xs px-2 py-0.5 rounded"
-                        >
-                          {l.name} ({l.imageCount})
-                        </span>
+                        <div key={l.id}>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="bg-surface-light text-primary-purple text-xs px-2 py-0.5 rounded font-medium">
+                              {l.name}
+                            </span>
+                            <span className="text-xs text-text-secondary">{l.imageCount} imagini</span>
+                          </div>
+                          {l.images.length > 0 && (
+                            <div className="grid grid-cols-6 gap-1">
+                              {l.images.map((img) => (
+                                <AuthenticatedImage
+                                  key={img.id}
+                                  imageId={img.id}
+                                  alt={l.name}
+                                  className="w-full aspect-square object-cover rounded"
+                                />
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       ))}
                     </div>
                   )}
