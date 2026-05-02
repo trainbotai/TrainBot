@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { apiFetch, ApiError } from '../lib/api'
 import { useAuthStore } from '../auth/authStore'
 import type { ClassMLProject } from '../lib/types'
 import AuthenticatedImage from './AuthenticatedImage'
+import ImageLightbox from './ImageLightbox'
 
 function relativeTime(iso: string): string {
   const diffMs = Date.now() - new Date(iso).getTime()
@@ -17,6 +19,7 @@ function relativeTime(iso: string): string {
 
 export default function ClassMLProjects({ classId }: { classId: string }) {
   const accessToken = useAuthStore((s) => s.accessToken)
+  const [lightbox, setLightbox] = useState<{ id: string; ids: string[]; caption: string } | null>(null)
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['class-ml', classId],
@@ -101,12 +104,23 @@ export default function ClassMLProjects({ classId }: { classId: string }) {
                           {l.images.length > 0 && (
                             <div className="grid grid-cols-6 gap-1">
                               {l.images.map((img) => (
-                                <AuthenticatedImage
+                                <button
                                   key={img.id}
-                                  imageId={img.id}
-                                  alt={l.name}
-                                  className="w-full aspect-square object-cover rounded"
-                                />
+                                  onClick={() =>
+                                    setLightbox({
+                                      id: img.id,
+                                      ids: l.images.map((i) => i.id),
+                                      caption: `${s.displayName ?? s.username} · ${p.name} · ${l.name}`,
+                                    })
+                                  }
+                                  className="block w-full aspect-square overflow-hidden rounded hover:ring-2 hover:ring-primary-purple transition"
+                                >
+                                  <AuthenticatedImage
+                                    imageId={img.id}
+                                    alt={l.name}
+                                    className="w-full h-full object-cover"
+                                  />
+                                </button>
                               ))}
                             </div>
                           )}
@@ -120,6 +134,15 @@ export default function ClassMLProjects({ classId }: { classId: string }) {
           </div>
         )
       })}
+
+      <ImageLightbox
+        open={lightbox !== null}
+        onClose={() => setLightbox(null)}
+        imageId={lightbox?.id ?? null}
+        imageIds={lightbox?.ids}
+        caption={lightbox?.caption}
+        onNavigate={(id) => lightbox && setLightbox({ ...lightbox, id })}
+      />
     </div>
   )
 }
