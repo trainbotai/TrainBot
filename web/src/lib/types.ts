@@ -46,8 +46,10 @@ export interface ClassDetail {
 }
 
 export interface MLLabelSummary {
+  id: string
   name: string
   imageCount: number
+  images: { id: string }[]
 }
 
 export interface ClassMLProject {
