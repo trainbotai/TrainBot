@@ -9,6 +9,7 @@ import { authRouter } from './modules/auth/auth.routes.js';
 import { classesRouter } from './modules/classes/classes.routes.js';
 import { classStudentsRouter, studentsRouter } from './modules/students/students.routes.js';
 import { studentMlRouter, teacherMlRouter, sharedMlRouter } from './modules/ml/ml.routes.js';
+import { teacherAssignmentsRouter, studentAssignmentsRouter } from './modules/assignments/assignments.routes.js';
 
 export function createApp(): Application {
   const app = express();
@@ -43,6 +44,8 @@ export function createApp(): Application {
   app.use('/api/v1/student/ml', studentMlRouter);
   app.use('/api/v1/teacher', teacherMlRouter);
   app.use('/api/v1/ml', sharedMlRouter);
+  app.use('/api/v1/teacher', teacherAssignmentsRouter);
+  app.use('/api/v1/student', studentAssignmentsRouter);
 
   // 404 fallback
   app.use((req, res) => {
