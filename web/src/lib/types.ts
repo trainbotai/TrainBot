@@ -64,6 +64,18 @@ export interface ClassMLProject {
   labels: MLLabelSummary[]
 }
 
+export interface Assignment {
+  id: string
+  classId: string
+  title: string
+  description: string
+  dueAt: string | null
+  archivedAt: string | null
+  createdAt: string
+  updatedAt: string
+  _count: { submissions: number }
+}
+
 export interface TeacherStats {
   classCount: number
   studentCount: number
