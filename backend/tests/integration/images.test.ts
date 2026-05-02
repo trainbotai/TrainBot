@@ -175,4 +175,61 @@ describe('Images', () => {
       .field('clientId', 'img-1');
     expect(res.status).toBe(400);
   });
+
+  it('deleting project removes image files from disk', async () => {
+    const fs = await import('node:fs/promises');
+    const path = await import('node:path');
+    const ctx = await setup();
+    const upload = await request(app)
+      .post(`/api/v1/student/ml/projects/${ctx.projectId}/labels/${ctx.labelId}/images`)
+      .set('Authorization', `Bearer ${ctx.studentToken}`)
+      .field('clientId', 'img-cleanup')
+      .attach('image', await makeJpegBuffer(), 'photo.jpg');
+
+    const filename = (upload.body as { filename: string }).filename;
+    const fullPath = path.join(process.env.UPLOAD_DIR!, filename);
+
+    await fs.access(fullPath); // exists pre-delete
+
+    await request(app)
+      .delete(`/api/v1/student/ml/projects/${ctx.projectId}`)
+      .set('Authorization', `Bearer ${ctx.studentToken}`)
+      .expect(204);
+
+    let stillExists = true;
+    try { await fs.access(fullPath); } catch { stillExists = false; }
+    expect(stillExists).toBe(false);
+  });
+});
+
+describe('Teacher stats', () => {
+  it('returns aggregated counts', async () => {
+    const ts = Date.now();
+    const teacher = await request(app).post('/api/v1/auth/teacher/signup').send({
+      email: `stats-${ts}-${Math.random()}@b.ro`,
+      password: 'verysecret',
+      name: 'T',
+      tenantName: 'School',
+      tenantSlug: `stats-${ts}-${Math.floor(Math.random() * 1e6)}`,
+    });
+    const tt = teacher.body.accessToken as string;
+
+    const klass = await request(app)
+      .post('/api/v1/teacher/classes')
+      .set('Authorization', `Bearer ${tt}`)
+      .send({ name: 'C1' });
+    await request(app)
+      .post(`/api/v1/teacher/classes/${klass.body.id}/students`)
+      .set('Authorization', `Bearer ${tt}`)
+      .send({ username: 'st1', password: 'parola1' });
+
+    const stats = await request(app)
+      .get('/api/v1/teacher/stats')
+      .set('Authorization', `Bearer ${tt}`);
+    expect(stats.status).toBe(200);
+    expect(stats.body.classCount).toBe(1);
+    expect(stats.body.studentCount).toBe(1);
+    expect(stats.body.projectCount).toBe(0);
+    expect(stats.body.imagesLast24h).toBe(0);
+  });
 });

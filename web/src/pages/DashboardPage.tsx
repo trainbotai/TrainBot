@@ -5,6 +5,7 @@ import { apiFetch, ApiError } from '../lib/api'
 import { useAuthStore } from '../auth/authStore'
 import type { ClassSummary } from '../lib/types'
 import CreateClassModal from '../components/CreateClassModal'
+import StatsCard from '../components/StatsCard'
 
 export default function DashboardPage() {
   const accessToken = useAuthStore((s) => s.accessToken)
@@ -17,6 +18,7 @@ export default function DashboardPage() {
 
   return (
     <div>
+      <StatsCard />
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold text-text-primary">Clasele mele</h1>
         <button onClick={() => setOpenCreate(true)}
