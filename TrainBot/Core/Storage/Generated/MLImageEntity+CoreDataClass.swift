@@ -12,5 +12,6 @@ extension MLImageEntity {
     @NSManaged public var id: UUID?
     @NSManaged public var filename: String?
     @NSManaged public var createdAt: Date?
+    @NSManaged public var serverImageId: String?
     @NSManaged public var label: MLLabelEntity?
 }

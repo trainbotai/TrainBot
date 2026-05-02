@@ -1,6 +1,15 @@
 import Foundation
 import CoreData
 
+private struct SyncedProjectResponse: Decodable {
+    let id: String
+    let labels: [SyncedLabel]
+    struct SyncedLabel: Decodable {
+        let id: String
+        let clientId: String
+    }
+}
+
 @Observable
 @MainActor
 final class MLSyncService {
@@ -8,13 +17,20 @@ final class MLSyncService {
     private(set) var lastSyncedAt: Date?
     private(set) var lastError: String?
     private(set) var syncedCount: Int = 0
+    private(set) var uploadedImageCount: Int = 0
 
     private let context: NSManagedObjectContext
     private let authSession: AuthSession
+    private let imageStorage: ImageStorage
 
-    init(context: NSManagedObjectContext, authSession: AuthSession) {
+    init(
+        context: NSManagedObjectContext,
+        authSession: AuthSession,
+        imageStorage: ImageStorage = .default
+    ) {
         self.context = context
         self.authSession = authSession
+        self.imageStorage = imageStorage
     }
 
     func syncAll() async {
@@ -25,24 +41,31 @@ final class MLSyncService {
 
         isSyncing = true
         lastError = nil
+        uploadedImageCount = 0
         defer { isSyncing = false }
 
         do {
             let projects = try fetchAllProjects()
-            var ok = 0
+            var syncedProjects = 0
+            var uploaded = 0
             for project in projects {
                 let payload = build(from: project)
-                let _: AuthResponse? = try? await pushProject(payload, token: token)
-                ok += 1
+                guard let response: SyncedProjectResponse = try? await pushProject(payload, token: token) else {
+                    continue
+                }
+                syncedProjects += 1
+                let labelMap = Dictionary(uniqueKeysWithValues: response.labels.map { ($0.clientId, $0.id) })
+                uploaded += try await uploadPendingImages(for: project, projectServerId: response.id, labelClientToServer: labelMap, token: token)
             }
-            syncedCount = ok
+            syncedCount = syncedProjects
+            uploadedImageCount = uploaded
             lastSyncedAt = Date()
         } catch {
             lastError = (error as? APIError)?.errorDescription ?? error.localizedDescription
         }
     }
 
-    private func pushProject(_ payload: MLProjectSyncPayload, token: String) async throws -> AuthResponse {
+    private func pushProject(_ payload: MLProjectSyncPayload, token: String) async throws -> SyncedProjectResponse {
         let endpoint = APIEndpoint.syncMLProject(payload)
         return try await APIClient.shared.request(endpoint, bearerToken: token)
     }
@@ -77,5 +100,46 @@ final class MLSyncService {
             trainedAt: trainedAt,
             labels: labels
         )
+    }
+
+    private func uploadPendingImages(
+        for project: MLProjectEntity,
+        projectServerId: String,
+        labelClientToServer: [String: String],
+        token: String
+    ) async throws -> Int {
+        var uploaded = 0
+        let labels = (project.labels?.allObjects as? [MLLabelEntity] ?? [])
+        for label in labels {
+            let labelClientId = (label.id ?? UUID()).uuidString
+            guard let labelServerId = labelClientToServer[labelClientId] else { continue }
+            let images = (label.images as? Set<MLImageEntity> ?? [])
+                .filter { $0.serverImageId == nil && $0.filename != nil }
+            for image in images {
+                guard let filename = image.filename, let imageId = image.id else { continue }
+                let jpegData: Data
+                do {
+                    jpegData = try imageStorage.loadJpegData(filename: filename)
+                } catch {
+                    continue // missing local file — skip
+                }
+                do {
+                    let resp = try await MultipartUploader.uploadImage(
+                        projectServerId: projectServerId,
+                        labelServerId: labelServerId,
+                        clientId: imageId.uuidString,
+                        jpegData: jpegData,
+                        bearerToken: token
+                    )
+                    image.serverImageId = resp.id
+                    try? context.save()
+                    uploaded += 1
+                } catch {
+                    // Don't stop the whole sync — just log and continue
+                    lastError = (error as? APIError)?.errorDescription ?? error.localizedDescription
+                }
+            }
+        }
+        return uploaded
     }
 }
