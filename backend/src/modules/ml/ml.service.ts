@@ -135,7 +135,19 @@ export async function teacherListClassProjects(opts: {
     orderBy: { updatedAt: 'desc' },
     include: {
       student: { select: { id: true, username: true, displayName: true } },
-      labels: { select: { name: true, imageCount: true } },
+      labels: {
+        select: {
+          id: true,
+          name: true,
+          imageCount: true,
+          // Up to 6 most recent image IDs per label (preview thumbnails for teacher)
+          images: {
+            select: { id: true },
+            take: 6,
+            orderBy: { createdAt: 'desc' },
+          },
+        },
+      },
     },
   });
 }
