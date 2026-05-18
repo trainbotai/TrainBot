@@ -24,6 +24,7 @@
         <attribute name="createdAt" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="filename" optional="NO" attributeType="String"/>
         <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="serverImageId" optional="YES" attributeType="String"/>
         <relationship name="label" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MLLabelEntity" inverseName="images" inverseEntity="MLLabelEntity"/>
         <fetchIndex name="byIdIndex">
             <fetchIndexElement property="id" type="Binary" order="ascending"/>

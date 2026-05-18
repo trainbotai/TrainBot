@@ -47,6 +47,11 @@ final class ImageStorage {
         return image
     }
 
+    func loadJpegData(filename: String) throws -> Data {
+        let url = rootDirectory.appendingPathComponent(filename)
+        return try Data(contentsOf: url)
+    }
+
     func delete(filename: String) throws {
         let url = rootDirectory.appendingPathComponent(filename)
         try FileManager.default.removeItem(at: url)

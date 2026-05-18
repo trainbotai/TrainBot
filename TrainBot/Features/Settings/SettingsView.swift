@@ -41,6 +41,13 @@ struct SettingsView: View {
                     Spacer()
                     Text(lastSyncText).foregroundStyle(.secondary).font(.caption)
                 }
+                if mlSync.uploadedImageCount > 0 {
+                    HStack {
+                        Text("Imagini încărcate")
+                        Spacer()
+                        Text("\(mlSync.uploadedImageCount)").foregroundStyle(.secondary).font(.caption)
+                    }
+                }
                 if let err = mlSync.lastError {
                     Text(err).font(.caption).foregroundStyle(.red)
                 }

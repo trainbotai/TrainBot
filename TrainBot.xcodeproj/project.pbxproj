@@ -48,6 +48,7 @@
 		BBF212EDE319A26EE384AA52 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5ECC2184D39F7F2C9551D3C /* APIEndpoint.swift */; };
 		C1418DA071D52E0CF79DD996 /* DailyChallengeEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF48209005550E45045F20 /* DailyChallengeEntity+CoreDataClass.swift */; };
 		C85D17E355F8F636A270BE08 /* MascotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1873B6E8B5A42B4F26372D85 /* MascotView.swift */; };
+		C8996A0B53B7BFD2D43A9D1B /* MultipartUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8593F710FED60B2CC4E4449E /* MultipartUploader.swift */; };
 		CCF7F8383A6071CF892AF6D1 /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60706F22693E5FC3EA2A6224 /* PrimaryButton.swift */; };
 		D16DD6B754434FFEB6FD4C5A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67463286030BA5199E50FE39 /* Colors.swift */; };
 		DCEA643151DCFE7BDCB9B7B5 /* MLLabelEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227AF9867F84CE55F8640A26 /* MLLabelEntity+CoreDataClass.swift */; };
@@ -117,6 +118,7 @@
 		702EA711B8835FC538A81F8A /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		79A4E18E7126A62D8F0EB819 /* DailyChallengeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyChallengeService.swift; sourceTree = "<group>"; };
 		8433D60DCD0FB822FDC50029 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		8593F710FED60B2CC4E4449E /* MultipartUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipartUploader.swift; sourceTree = "<group>"; };
 		87264F94D59D68680391E426 /* MLModelEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MLModelEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		876C6FADA1776CE4DCAE46D5 /* MLProjectRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLProjectRepository.swift; sourceTree = "<group>"; };
 		90E34B01C8A170810C6D30DF /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
@@ -430,6 +432,7 @@
 				90E34B01C8A170810C6D30DF /* APIClient.swift */,
 				C5ECC2184D39F7F2C9551D3C /* APIEndpoint.swift */,
 				A92D134CD45A1E9DEBFE5F42 /* APIError.swift */,
+				8593F710FED60B2CC4E4449E /* MultipartUploader.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -630,6 +633,7 @@
 				B0E509C7897CD46FA3DDC1D9 /* MLSyncService.swift in Sources */,
 				04033740F3E345DB415A749F /* MascotState.swift in Sources */,
 				C85D17E355F8F636A270BE08 /* MascotView.swift in Sources */,
+				C8996A0B53B7BFD2D43A9D1B /* MultipartUploader.swift in Sources */,
 				4860FF930B4910EB45ED86D1 /* NavigationCard.swift in Sources */,
 				2103DD8E82658EF02F7790FB /* OnboardingView.swift in Sources */,
 				07F840708D888B3051C45E39 /* PersistenceController.swift in Sources */,
