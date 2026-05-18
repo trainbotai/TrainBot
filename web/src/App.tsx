@@ -3,6 +3,7 @@ import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import DashboardPage from './pages/DashboardPage'
 import ClassDetailPage from './pages/ClassDetailPage'
+import LegalPage from './pages/LegalPage'
 import Layout from './components/Layout'
 import ProtectedRoute from './auth/ProtectedRoute'
 
@@ -11,6 +12,9 @@ export default function App() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
+      <Route path="/privacy" element={<LegalPage doc="privacy" />} />
+      <Route path="/terms" element={<LegalPage doc="terms" />} />
+      <Route path="/dpa" element={<LegalPage doc="dpa" />} />
       <Route
         element={
           <ProtectedRoute>

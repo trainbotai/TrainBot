@@ -4,3 +4,19 @@
 
 html, body, #root { height: 100%; }
 body { @apply bg-surface-light text-text-primary; }
+
+.prose-trainbot h1 { @apply text-3xl font-bold text-text-primary mb-4 mt-2; }
+.prose-trainbot h2 { @apply text-xl font-bold text-text-primary mt-8 mb-3; }
+.prose-trainbot h3 { @apply text-lg font-semibold text-text-primary mt-6 mb-2; }
+.prose-trainbot p { @apply mb-3 text-text-primary leading-relaxed; }
+.prose-trainbot ul { @apply list-disc pl-6 mb-4 text-text-primary; }
+.prose-trainbot ol { @apply list-decimal pl-6 mb-4 text-text-primary; }
+.prose-trainbot li { @apply mb-1; }
+.prose-trainbot strong { @apply font-semibold; }
+.prose-trainbot a { @apply text-primary-purple hover:underline; }
+.prose-trainbot code { @apply bg-surface-light px-1.5 py-0.5 rounded text-sm font-mono; }
+.prose-trainbot blockquote { @apply border-l-4 border-warning bg-yellow-50 px-4 py-3 my-4 text-text-secondary italic; }
+.prose-trainbot table { @apply w-full border-collapse my-4 text-sm; }
+.prose-trainbot th { @apply border border-gray-300 px-3 py-2 bg-surface-light font-semibold text-left; }
+.prose-trainbot td { @apply border border-gray-300 px-3 py-2; }
+.prose-trainbot hr { @apply my-6 border-gray-200; }
