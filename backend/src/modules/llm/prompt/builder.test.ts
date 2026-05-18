@@ -10,7 +10,7 @@ describe('buildPrompt', () => {
   it('builds messages array with system + few-shot pairs + user query', () => {
     const messages = buildPrompt({ examples, userQuery: 'Salut!' });
     expect(messages).toHaveLength(1 + examples.length * 2 + 1);
-    expect(messages[0].role).toBe('system');
+    expect(messages[0]!.role).toBe('system');
     expect(messages[1]).toEqual({ role: 'user', content: 'Ce mai faci?' });
     expect(messages[2]).toEqual({ role: 'assistant', content: 'Sunt foarte bine!' });
     expect(messages[5]).toEqual({ role: 'user', content: 'Salut!' });
@@ -18,7 +18,7 @@ describe('buildPrompt', () => {
 
   it('system prompt includes safety + persona instructions', () => {
     const messages = buildPrompt({ examples: [], userQuery: 'Hi' });
-    const system = messages[0].content;
+    const system = messages[0]!.content;
     expect(system).toContain('TrainBot');
     expect(system).toContain('copii');
     expect(system).toMatch(/română|Romanian/i);
@@ -32,7 +32,7 @@ describe('buildPrompt', () => {
   it('handles empty examples', () => {
     const messages = buildPrompt({ examples: [], userQuery: 'Salut' });
     expect(messages).toHaveLength(2);
-    expect(messages[0].role).toBe('system');
+    expect(messages[0]!.role).toBe('system');
     expect(messages[1]).toEqual({ role: 'user', content: 'Salut' });
   });
 });
