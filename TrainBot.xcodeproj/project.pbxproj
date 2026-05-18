@@ -42,6 +42,7 @@
 		99DD9F1ADB32A05BE8C774AB /* AchievementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6253DB5B170593539FC20DE4 /* AchievementsView.swift */; };
 		A24334F58E5CF7708162A598 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20BDF01E051597ABD389266D /* Assets.xcassets */; };
 		B0365B5C530F4F5F3FF0A5AC /* ImageClassifierTrainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FD0D948828275B34683E59 /* ImageClassifierTrainer.swift */; };
+		B0E509C7897CD46FA3DDC1D9 /* MLSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C87E18DD3CF893382752BD /* MLSyncService.swift */; };
 		B14A2EF12A5DC75200E81929 /* SecondaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D4D34DCA73EE04F2B492D /* SecondaryButton.swift */; };
 		B6D580590EF66374093E4B64 /* MLModelEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87264F94D59D68680391E426 /* MLModelEntity+CoreDataClass.swift */; };
 		BBF212EDE319A26EE384AA52 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5ECC2184D39F7F2C9551D3C /* APIEndpoint.swift */; };
@@ -127,6 +128,7 @@
 		AA62D002C72728761229B69A /* AppCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCard.swift; sourceTree = "<group>"; };
 		B15DEC4F5BAFCE09EB6C035B /* DailyChallengeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyChallengeView.swift; sourceTree = "<group>"; };
 		B84DEAE122ED197EF8773DDE /* KeychainHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelperTests.swift; sourceTree = "<group>"; };
+		B9C87E18DD3CF893382752BD /* MLSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLSyncService.swift; sourceTree = "<group>"; };
 		BFF41C60612B8FEFC2FB365E /* TrainedClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainedClassifier.swift; sourceTree = "<group>"; };
 		C0FA3A5FBA413526C828CBC0 /* MLProjectRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLProjectRepositoryTests.swift; sourceTree = "<group>"; };
 		C1FEF04E4CE5543F00E63150 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
@@ -458,6 +460,7 @@
 				79A4E18E7126A62D8F0EB819 /* DailyChallengeService.swift */,
 				53FD0D948828275B34683E59 /* ImageClassifierTrainer.swift */,
 				876C6FADA1776CE4DCAE46D5 /* MLProjectRepository.swift */,
+				B9C87E18DD3CF893382752BD /* MLSyncService.swift */,
 				BFF41C60612B8FEFC2FB365E /* TrainedClassifier.swift */,
 			);
 			path = ML;
@@ -624,6 +627,7 @@
 				B6D580590EF66374093E4B64 /* MLModelEntity+CoreDataClass.swift in Sources */,
 				450512255A558102ABC0BA1B /* MLProjectEntity+CoreDataClass.swift in Sources */,
 				31879CED3DEAB04E384D2753 /* MLProjectRepository.swift in Sources */,
+				B0E509C7897CD46FA3DDC1D9 /* MLSyncService.swift in Sources */,
 				04033740F3E345DB415A749F /* MascotState.swift in Sources */,
 				C85D17E355F8F636A270BE08 /* MascotView.swift in Sources */,
 				4860FF930B4910EB45ED86D1 /* NavigationCard.swift in Sources */,
