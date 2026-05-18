@@ -19,6 +19,10 @@ const envSchema = z.object({
 
   RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(60_000),
   RATE_LIMIT_MAX: z.coerce.number().int().positive().default(60),
+
+  UPLOAD_DIR: z.string().default('/var/uploads/trainbot'),
+  UPLOAD_MAX_BYTES: z.coerce.number().int().positive().default(5 * 1024 * 1024),
+  UPLOAD_MAX_DIMENSION: z.coerce.number().int().positive().default(1024),
 });
 
 const parsed = envSchema.safeParse(process.env);
