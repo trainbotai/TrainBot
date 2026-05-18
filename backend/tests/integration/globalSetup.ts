@@ -27,6 +27,8 @@ export async function setup() {
   process.env.BCRYPT_ROUNDS = '8';
   process.env.RATE_LIMIT_MAX = '10000';
   process.env.LOG_LEVEL = 'fatal';
+  process.env.GROQ_API_KEY = 'test-groq-key';
+  process.env.OPENAI_API_KEY = 'test-openai-key';
 
   tmpUploadDir = path.join(os.tmpdir(), `trainbot-test-uploads-${Date.now()}`);
   await fs.mkdir(tmpUploadDir, { recursive: true });
