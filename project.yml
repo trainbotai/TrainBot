@@ -49,6 +49,8 @@ targets:
         NSCameraUsageDescription: "TrainBot foloseste camera pentru a face poze de antrenament pentru AI-ul tau."
         NSPhotoLibraryUsageDescription: "TrainBot acceseaza galeria pentru a importa poze de antrenament."
         ITSAppUsesNonExemptEncryption: false
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.luca.trainbot.TrainBot
@@ -70,6 +72,8 @@ targets:
       base:
         BUNDLE_LOADER: "$(TEST_HOST)"
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/TrainBot.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TrainBot"
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.luca.trainbot.TrainBotTests
 
   TrainBotUITests:
     type: bundle.ui-testing
@@ -79,6 +83,10 @@ targets:
       - path: TrainBotUITests
     dependencies:
       - target: TrainBot
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.luca.trainbot.TrainBotUITests
 
 schemes:
   TrainBot:
