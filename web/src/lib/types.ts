@@ -44,3 +44,20 @@ export interface ClassDetail {
   createdAt: string
   students: StudentRecord[]
 }
+
+export interface MLLabelSummary {
+  name: string
+  imageCount: number
+}
+
+export interface ClassMLProject {
+  id: string
+  clientId: string
+  name: string
+  modelTrained: boolean
+  modelVersion: number
+  trainedAt: string | null
+  updatedAt: string
+  student: { id: string; username: string; displayName: string | null }
+  labels: MLLabelSummary[]
+}
