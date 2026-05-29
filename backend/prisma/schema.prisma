@@ -89,8 +89,11 @@ model Assignment {
   createdAt   DateTime            @default(now())
   updatedAt   DateTime            @updatedAt
 
+  type        AssignmentType    @default(ML_TRAINING)
+
   class       Class                  @relation(fields: [classId], references: [id], onDelete: Cascade)
   submissions AssignmentSubmission[]
+  llmSessions LLMSession[]
 
   @@index([tenantId])
   @@index([classId])
@@ -128,6 +131,7 @@ model Student {
   class         Class          @relation(fields: [classId], references: [id], onDelete: Cascade)
   refreshTokens RefreshToken[]
   mlProjects    MLProject[]
+  llmSessions   LLMSession[]
 
   @@unique([classId, username])
   @@index([tenantId])
@@ -208,4 +212,93 @@ model RefreshToken {
   @@index([teacherId])
   @@index([studentId])
   @@map("refresh_tokens")
+}
+
+// MARK: - LLM Module (Phase 3A)
+
+model LLMSession {
+  id               String              @id @default(cuid())
+  tenantId         String
+  studentId        String
+  assignmentId     String?
+  name             String
+  currentVersionId String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  deletedAt        DateTime?
+
+  student          Student             @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  assignment       Assignment?         @relation(fields: [assignmentId], references: [id], onDelete: SetNull)
+  versions         LLMSessionVersion[]
+  queries          LLMQuery[]
+  reports          LLMReport[]
+
+  @@index([tenantId])
+  @@index([studentId])
+  @@index([assignmentId])
+  @@map("llm_sessions")
+}
+
+model LLMSessionVersion {
+  id            String             @id @default(cuid())
+  sessionId     String
+  versionNumber Int
+  examples      Json
+  createdAt     DateTime           @default(now())
+
+  session       LLMSession         @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  queries       LLMQuery[]
+
+  @@unique([sessionId, versionNumber])
+  @@map("llm_session_versions")
+}
+
+model LLMQuery {
+  id                       String            @id @default(cuid())
+  sessionId                String
+  versionId                String
+  studentId                String
+
+  userPrompt               String            @db.Text
+  aiResponse               String            @db.Text
+
+  inputModerationFlagged   Boolean           @default(false)
+  outputModerationFlagged  Boolean           @default(false)
+  moderationCategories     Json?
+
+  inputTokens              Int?
+  outputTokens             Int?
+  groqLatencyMs            Int?
+
+  createdAt                DateTime          @default(now())
+
+  session                  LLMSession        @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  version                  LLMSessionVersion @relation(fields: [versionId], references: [id])
+
+  @@index([sessionId])
+  @@index([studentId, createdAt])
+  @@index([outputModerationFlagged])
+  @@map("llm_queries")
+}
+
+model LLMReport {
+  id          String      @id @default(cuid())
+  sessionId   String
+  studentId   String
+  teacherId   String
+  reason      String?
+  reviewed    Boolean     @default(false)
+  reviewedAt  DateTime?
+  createdAt   DateTime    @default(now())
+
+  session     LLMSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([teacherId, reviewed])
+  @@map("llm_reports")
+}
+
+enum AssignmentType {
+  ML_TRAINING
+  LLM_TRAINING
+  MIXED
 }

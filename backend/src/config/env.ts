@@ -28,6 +28,17 @@ const envSchema = z.object({
   RESEND_API_KEY: z.string().optional(),
   EMAIL_FROM: z.string().default('TrainBot <onboarding@resend.dev>'),
   PUBLIC_WEB_URL: z.string().default('https://trainbot.perpetuummobile.tech'),
+
+  // LLM Module (Phase 3A)
+  GROQ_API_KEY: z.string().min(1),
+  OPENAI_API_KEY: z.string().min(1),  // for Moderation API only (free)
+  LLM_PROVIDER: z.enum(['groq', 'anthropic']).default('groq'),
+  LLM_MODEL: z.string().default('llama-3.3-70b-versatile'),
+  LLM_MAX_QUERIES_PER_DAY: z.coerce.number().int().positive().default(50),
+  LLM_MAX_EXAMPLES_PER_VERSION: z.coerce.number().int().positive().max(20).default(10),
+  LLM_MAX_EXAMPLE_LENGTH: z.coerce.number().int().positive().default(500),
+  LLM_GROQ_TIMEOUT_MS: z.coerce.number().int().positive().default(10000),
+  LLM_RETENTION_DAYS: z.coerce.number().int().positive().default(90),
 });
 
 const parsed = envSchema.safeParse(process.env);

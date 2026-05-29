@@ -58,3 +58,65 @@ export class BadRequestError extends AppError {
     this.name = 'BadRequestError';
   }
 }
+
+export class LLMQuotaExceededError extends AppError {
+  constructor(limit: number) {
+    super(
+      429,
+      'llm/quota_exceeded',
+      'Quota exceeded',
+      `Ai folosit toate ${limit} de mesaje pe azi. Revino mâine.`,
+    );
+    this.name = 'LLMQuotaExceededError';
+  }
+}
+
+export class LLMContentBlockedInputError extends AppError {
+  constructor(reason?: string) {
+    super(
+      400,
+      'llm/content_blocked_input',
+      'Content blocked',
+      reason ?? 'Întrebarea conține cuvinte care nu sunt potrivite. Reformulează.',
+    );
+    this.name = 'LLMContentBlockedInputError';
+  }
+}
+
+export class LLMContentBlockedOutputError extends AppError {
+  constructor() {
+    super(
+      502,
+      'llm/content_blocked_output',
+      'Output blocked',
+      'Robotul nu a putut răspunde la această întrebare. Încearcă altceva.',
+    );
+    this.name = 'LLMContentBlockedOutputError';
+  }
+}
+
+export class LLMSessionNotFoundError extends AppError {
+  constructor() {
+    super(404, 'llm/session_not_found', 'Session not found', 'Botul nu a fost găsit.');
+    this.name = 'LLMSessionNotFoundError';
+  }
+}
+
+export class LLMProviderUnavailableError extends AppError {
+  constructor() {
+    super(
+      503,
+      'llm/groq_unavailable',
+      'LLM provider unavailable',
+      'Robotul nu poate răspunde acum. Încearcă peste un minut.',
+    );
+    this.name = 'LLMProviderUnavailableError';
+  }
+}
+
+export class LLMExamplesInvalidError extends AppError {
+  constructor(detail: string) {
+    super(400, 'llm/examples_invalid', 'Invalid examples', detail);
+    this.name = 'LLMExamplesInvalidError';
+  }
+}
