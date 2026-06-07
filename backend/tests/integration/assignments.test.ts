@@ -150,6 +150,26 @@ describe('Assignments', () => {
     expect(list.body.data).toHaveLength(0);
   });
 
+  it('creates assignment with type=LLM_TRAINING', async () => {
+    const ctx = await setup();
+    const res = await request(app)
+      .post(`/api/v1/teacher/classes/${ctx.classId}/assignments`)
+      .set('Authorization', `Bearer ${ctx.teacherToken}`)
+      .send({ title: 'LLM task', description: 'scrie un prompt bun', type: 'LLM_TRAINING' });
+    expect(res.status).toBe(201);
+    expect(res.body.type).toBe('LLM_TRAINING');
+  });
+
+  it('defaults to ML_TRAINING when type omitted', async () => {
+    const ctx = await setup();
+    const res = await request(app)
+      .post(`/api/v1/teacher/classes/${ctx.classId}/assignments`)
+      .set('Authorization', `Bearer ${ctx.teacherToken}`)
+      .send({ title: 'Default task', description: 'fara type' });
+    expect(res.status).toBe(201);
+    expect(res.body.type).toBe('ML_TRAINING');
+  });
+
   it('student linking ml project requires ownership', async () => {
     const ctxA = await setup();
     const projA = await request(app)
