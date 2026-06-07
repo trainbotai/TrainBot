@@ -1,3 +1,5 @@
+import type { AssignmentType } from './llmTypes'
+
 export interface AuthUser {
   id: string
   role: 'teacher' | 'student'
@@ -69,6 +71,7 @@ export interface Assignment {
   classId: string
   title: string
   description: string
+  type: AssignmentType
   dueAt: string | null
   archivedAt: string | null
   createdAt: string
