@@ -1,5 +1,6 @@
 import { db } from '../../lib/db.js';
 import { NotFoundError, ForbiddenError } from '../../lib/errors.js';
+import type { AssignmentType } from '@prisma/client';
 
 export async function teacherCreate(opts: {
   teacherId: string;
@@ -8,6 +9,7 @@ export async function teacherCreate(opts: {
   title: string;
   description: string;
   dueAt?: string;
+  type?: AssignmentType;
 }) {
   const klass = await db.class.findFirst({
     where: { id: opts.classId, teacherId: opts.teacherId, tenantId: opts.tenantId },
@@ -20,6 +22,7 @@ export async function teacherCreate(opts: {
       title: opts.title,
       description: opts.description,
       dueAt: opts.dueAt ? new Date(opts.dueAt) : null,
+      ...(opts.type !== undefined ? { type: opts.type } : {}),
     },
   });
 }
@@ -80,6 +83,7 @@ export async function teacherUpdate(opts: {
   title?: string;
   description?: string;
   dueAt?: string | null;
+  type?: AssignmentType;
 }) {
   const a = await db.assignment.findFirst({
     where: {
@@ -95,6 +99,7 @@ export async function teacherUpdate(opts: {
       ...(opts.title !== undefined ? { title: opts.title } : {}),
       ...(opts.description !== undefined ? { description: opts.description } : {}),
       ...(opts.dueAt !== undefined ? { dueAt: opts.dueAt === null ? null : new Date(opts.dueAt) } : {}),
+      ...(opts.type !== undefined ? { type: opts.type } : {}),
     },
   });
 }

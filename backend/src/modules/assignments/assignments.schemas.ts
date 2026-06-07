@@ -6,6 +6,7 @@ export const createAssignmentSchema = z.object({
     title: z.string().min(1).max(200),
     description: z.string().min(1).max(2000),
     dueAt: z.string().datetime().optional(),
+    type: z.enum(['ML_TRAINING', 'LLM_TRAINING', 'MIXED']).optional(),
   }),
 });
 
@@ -15,6 +16,7 @@ export const updateAssignmentSchema = z.object({
     title: z.string().min(1).max(200).optional(),
     description: z.string().min(1).max(2000).optional(),
     dueAt: z.string().datetime().nullable().optional(),
+    type: z.enum(['ML_TRAINING', 'LLM_TRAINING', 'MIXED']).optional(),
   }),
 });
 

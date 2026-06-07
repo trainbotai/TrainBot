@@ -4,6 +4,7 @@ import { apiFetch, ApiError } from '../lib/api'
 import { useAuthStore } from '../auth/authStore'
 import type { Assignment } from '../lib/types'
 import Modal from './Modal'
+import AssignmentLLMSessions from './AssignmentLLMSessions'
 
 function CreateAssignmentModal({
   open,
@@ -15,6 +16,7 @@ function CreateAssignmentModal({
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [dueAt, setDueAt] = useState('')
+  const [type, setType] = useState<'ML_TRAINING' | 'LLM_TRAINING' | 'MIXED'>('ML_TRAINING')
   const [error, setError] = useState<string | null>(null)
 
   const m = useMutation({
@@ -26,6 +28,7 @@ function CreateAssignmentModal({
           body: JSON.stringify({
             title: title.trim(),
             description: description.trim(),
+            type,
             dueAt: dueAt ? new Date(dueAt).toISOString() : undefined,
           }),
         },
@@ -33,7 +36,7 @@ function CreateAssignmentModal({
       ),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['class-assignments', classId] })
-      setTitle(''); setDescription(''); setDueAt('')
+      setTitle(''); setDescription(''); setDueAt(''); setType('ML_TRAINING')
       onClose()
     },
     onError: (err) => setError(err instanceof ApiError ? err.message : 'Eroare'),
@@ -51,6 +54,18 @@ function CreateAssignmentModal({
           <span className="text-sm text-text-secondary">Descriere</span>
           <textarea value={description} onChange={(e) => setDescription(e.target.value)} required minLength={1} maxLength={2000} rows={4}
             className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-primary-purple outline-none" />
+        </label>
+        <label className="block">
+          <span className="text-sm text-text-secondary">Tip temă</span>
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value as typeof type)}
+            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-primary-purple outline-none bg-white"
+          >
+            <option value="ML_TRAINING">Antrenare ML (poze)</option>
+            <option value="LLM_TRAINING">Antrenare bot LLM (chat)</option>
+            <option value="MIXED">Mixt</option>
+          </select>
         </label>
         <label className="block">
           <span className="text-sm text-text-secondary">Termen (opțional)</span>
@@ -114,8 +129,18 @@ export default function ClassAssignments({ classId }: { classId: string }) {
                 <h3 className="font-semibold text-text-primary">{a.title}</h3>
                 <p className="text-sm text-text-secondary mt-1 whitespace-pre-line">{a.description}</p>
                 <div className="flex flex-wrap items-center gap-3 mt-2 text-xs text-text-secondary">
-                  <span>📨 {a._count.submissions} predate</span>
-                  {a.dueAt && <span>📅 {new Date(a.dueAt).toLocaleString('ro-RO')}</span>}
+                  <span>{a._count.submissions} predate</span>
+                  {a.dueAt && <span>Termen: {new Date(a.dueAt).toLocaleString('ro-RO')}</span>}
+                  {a.type === 'LLM_TRAINING' && (
+                    <span className="px-2 py-0.5 rounded-full bg-purple-100 text-primary-purple text-xs font-medium">
+                      Bot LLM
+                    </span>
+                  )}
+                  {a.type === 'MIXED' && (
+                    <span className="px-2 py-0.5 rounded-full bg-blue-100 text-accent-blue text-xs font-medium">
+                      Mixt
+                    </span>
+                  )}
                 </div>
               </div>
               <button
@@ -126,6 +151,9 @@ export default function ClassAssignments({ classId }: { classId: string }) {
                 Arhivează
               </button>
             </div>
+            {(a.type === 'LLM_TRAINING' || a.type === 'MIXED') && (
+              <AssignmentLLMSessions assignmentId={a.id} />
+            )}
           </div>
         ))}
       </div>
