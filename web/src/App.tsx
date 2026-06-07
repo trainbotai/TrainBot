@@ -5,6 +5,7 @@ import DashboardPage from './pages/DashboardPage'
 import ClassDetailPage from './pages/ClassDetailPage'
 import LegalPage from './pages/LegalPage'
 import StudentDetailPage from './pages/StudentDetailPage'
+import LLMSessionDetailPage from './pages/LLMSessionDetailPage'
 import Layout from './components/Layout'
 import ProtectedRoute from './auth/ProtectedRoute'
 
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="/" element={<DashboardPage />} />
         <Route path="/classes/:classId" element={<ClassDetailPage />} />
         <Route path="/students/:studentId" element={<StudentDetailPage />} />
+        <Route path="/llm-sessions/:id" element={<LLMSessionDetailPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
