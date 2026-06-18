@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    enum Destination: Hashable { case training, testing, knowledge, dailyChallenge, achievements, settings }
+    enum Destination: Hashable { case training, testing, knowledge, dailyChallenge, achievements, settings, botList }
     @State private var path: [Destination] = []
 
     var body: some View {
@@ -58,6 +58,7 @@ struct HomeView: View {
     private var cardsGrid: some View {
         VStack(spacing: 14) {
             NavigationCard(title: "Antreneaza", subtitle: "Adauga poze si invata AI-ul", icon: "brain.head.profile") { path.append(.training) }
+            NavigationCard(title: "AI-ul tau", subtitle: "Antreneaza-ti botii si converseaza cu ei", icon: "bubble.left.and.bubble.right.fill") { path.append(.botList) }
             NavigationCard(title: "Testeaza", subtitle: "Vezi cat de bine recunoaste", icon: "viewfinder") { path.append(.testing) }
             NavigationCard(title: "Cunostinte", subtitle: "Toate pozele invatate", icon: "books.vertical") { path.append(.knowledge) }
             NavigationCard(title: "Provocarea zilei", subtitle: "Castiga XP rezolvand task-ul", icon: "star.circle") { path.append(.dailyChallenge) }
@@ -73,6 +74,7 @@ struct HomeView: View {
         case .dailyChallenge: DailyChallengeView()
         case .achievements: AchievementsView()
         case .settings: SettingsView()
+        case .botList: BotListView()
         }
     }
 }

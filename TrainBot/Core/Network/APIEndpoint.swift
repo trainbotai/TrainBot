@@ -61,6 +61,59 @@ extension APIEndpoint {
     }
 }
 
+extension APIEndpoint {
+    // MARK: - LLM Student endpoints
+
+    static func listLLMSessions() -> Self {
+        Self(method: .get, path: "/student/llm/sessions", body: nil)
+    }
+
+    static func getLLMSession(id: String) -> Self {
+        Self(method: .get, path: "/student/llm/sessions/\(id)", body: nil)
+    }
+
+    struct CreateSessionBody: Encodable {
+        let name: String
+        let examples: [Example]
+        let assignmentId: String?
+        struct Example: Encodable { let user: String; let ai: String }
+    }
+
+    static func createLLMSession(_ body: CreateSessionBody) -> Self {
+        Self(method: .post, path: "/student/llm/sessions", body: body)
+    }
+
+    struct AddVersionBody: Encodable {
+        let examples: [CreateSessionBody.Example]
+    }
+
+    static func addLLMVersion(sessionId: String, _ body: AddVersionBody) -> Self {
+        Self(method: .post, path: "/student/llm/sessions/\(sessionId)/versions", body: body)
+    }
+
+    static func deleteLLMSession(id: String) -> Self {
+        Self(method: .delete, path: "/student/llm/sessions/\(id)", body: nil)
+    }
+
+    static func listLLMQueries(sessionId: String, version: Int? = nil) -> Self {
+        var path = "/student/llm/sessions/\(sessionId)/queries"
+        if let v = version { path += "?version=\(v)" }
+        return Self(method: .get, path: path, body: nil)
+    }
+
+    struct ReportSessionBody: Encodable {
+        let reason: String?
+    }
+
+    static func reportLLMSession(sessionId: String, reason: String?) -> Self {
+        Self(method: .post, path: "/student/llm/sessions/\(sessionId)/report", body: ReportSessionBody(reason: reason))
+    }
+
+    static func llmQuota() -> Self {
+        Self(method: .get, path: "/student/llm/quota", body: nil)
+    }
+}
+
 struct MLLabelSyncPayload: Encodable {
     let clientId: String
     let name: String
