@@ -8,7 +8,7 @@ import { promisify } from 'node:util';
 
 // Inline bcrypt hash (node built-in, no import needed for simple case)
 // Using dynamic import for bcryptjs which is already a dependency
-const bcrypt = await import('bcryptjs');
+const bcrypt = (await import('bcryptjs')).default;
 
 const db = new PrismaClient();
 
