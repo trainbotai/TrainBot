@@ -38,8 +38,12 @@ export default function LoginPage() {
             type="email"
             required
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-primary-purple focus:ring-1 focus:ring-primary-purple outline-none"
+            onChange={(e) => { setEmail(e.target.value); setError(null) }}
+            className={`mt-1 block w-full rounded-lg border px-3 py-2 focus:ring-1 outline-none ${
+              error
+                ? 'border-danger focus:border-danger focus:ring-danger'
+                : 'border-gray-300 focus:border-primary-purple focus:ring-primary-purple'
+            }`}
           />
         </label>
         <label className="block">
@@ -48,8 +52,12 @@ export default function LoginPage() {
             type="password"
             required
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-primary-purple focus:ring-1 focus:ring-primary-purple outline-none"
+            onChange={(e) => { setPassword(e.target.value); setError(null) }}
+            className={`mt-1 block w-full rounded-lg border px-3 py-2 focus:ring-1 outline-none ${
+              error
+                ? 'border-danger focus:border-danger focus:ring-danger'
+                : 'border-gray-300 focus:border-primary-purple focus:ring-primary-purple'
+            }`}
           />
         </label>
         {error && <p className="text-danger text-sm">{error}</p>}
