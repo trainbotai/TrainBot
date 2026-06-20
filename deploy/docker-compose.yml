@@ -28,6 +28,25 @@ services:
       - ./uploads:/var/uploads/trainbot
     networks: [trainbot]
 
+  caddy:
+    build: ./caddy
+    restart: unless-stopped
+    ports:
+      - "33443:33443"
+    environment:
+      CF_API_TOKEN: ${CF_API_TOKEN}
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+    networks: [trainbot]
+
 networks:
   trainbot:
     driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:

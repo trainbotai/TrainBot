@@ -15,7 +15,7 @@ struct APIEndpoint {
     #if DEBUG
     static let baseURL = "http://localhost:3000/api/v1"
     #else
-    static let baseURL = "https://api.trainbot.moldluca.tech/api/v1"
+    static let baseURL = "https://api.trainbot.moldluca.tech:33443/api/v1"
     #endif
 
     func urlRequest() throws -> URLRequest {
