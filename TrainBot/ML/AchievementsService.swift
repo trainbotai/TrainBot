@@ -16,6 +16,7 @@ enum AchievementCatalog {
         .init(id: "fifty_images", title: "Profesor", description: "Adauga 50 de poze", icon: "rosette", target: 50),
         .init(id: "first_model", title: "Primul AI", description: "Antreneaza primul model", icon: "brain.head.profile", target: 1),
         .init(id: "high_accuracy", title: "Mintea Stralucitoare", description: "Atinge 90% accuracy", icon: "sparkles", target: 1),
+        .init(id: "bias_lesson", title: "Detectiv AI", description: "Completeaza lectia despre limitele AI", icon: "magnifyingglass.circle", target: 1),
     ]
 }
 
@@ -42,6 +43,10 @@ final class AchievementsService {
     func recordModelTrained(accuracy: Double) {
         bump("first_model", to: 1)
         if accuracy >= 0.9 { bump("high_accuracy", to: 1) }
+    }
+
+    func recordBiasLessonCompleted() {
+        bump("bias_lesson", to: 1)
     }
 
     private func bump(_ id: String, to value: Int) {

@@ -4,6 +4,7 @@ import CoreData
 
 struct TrainingView: View {
     @StateObject private var vm = TrainingViewModel(context: PersistenceController.shared.container.viewContext)
+    @State private var confettiTrigger = 0
 
     @State private var showNewProjectSheet = false
     @State private var newProjectName = ""
@@ -26,6 +27,13 @@ struct TrainingView: View {
         .background(AppColor.surfaceLight)
         .navigationTitle("Antreneaza")
         .navigationBarTitleDisplayMode(.large)
+        .confetti(trigger: $confettiTrigger)
+        .onChange(of: vm.lastAccuracy) { _, acc in
+            if acc != nil {
+                Haptics.success()
+                confettiTrigger += 1
+            }
+        }
         .sheet(isPresented: $showNewProjectSheet) {
             promptSheet(title: "Proiect nou", placeholder: "ex. Pisici si caini", text: $newProjectName) {
                 vm.createProject(name: newProjectName)
@@ -148,6 +156,7 @@ struct TrainingView: View {
             }
 
             PrimaryButton("Antreneaza!", icon: "brain") {
+                Haptics.tap()
                 Task { await vm.train() }
             }
             .disabled(vm.isTraining || vm.labels.count < 2)

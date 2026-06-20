@@ -3,6 +3,8 @@ import SwiftUI
 struct AchievementsView: View {
     @Environment(\.managedObjectContext) private var ctx
     @State private var items: [(AchievementDefinition, Int, Bool)] = []
+    @State private var confettiTrigger = 0
+    @State private var previousUnlockedCount = 0
 
     var body: some View {
         ScrollView {
@@ -29,6 +31,17 @@ struct AchievementsView: View {
         }
         .background(AppColor.surfaceLight)
         .navigationTitle("Realizari")
-        .onAppear { items = AchievementsService(context: ctx).loadAll() }
+        .confetti(trigger: $confettiTrigger)
+        .onAppear {
+            items = AchievementsService(context: ctx).loadAll()
+            previousUnlockedCount = items.filter { $0.2 }.count
+        }
+        .onChange(of: items.filter { $0.2 }.count) { _, newCount in
+            if newCount > previousUnlockedCount {
+                Haptics.success()
+                confettiTrigger += 1
+                previousUnlockedCount = newCount
+            }
+        }
     }
 }
