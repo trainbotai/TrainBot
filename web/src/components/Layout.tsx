@@ -33,6 +33,14 @@ export default function Layout() {
           <div className="flex items-center gap-4">
             {isTeacher && (
               <Link
+                to="/bots"
+                className="text-sm text-text-secondary hover:text-primary-purple"
+              >
+                Boți demo
+              </Link>
+            )}
+            {isTeacher && (
+              <Link
                 to="/reports"
                 className="text-sm text-text-secondary hover:text-primary-purple flex items-center gap-1"
               >

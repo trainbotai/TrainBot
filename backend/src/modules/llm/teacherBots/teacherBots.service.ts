@@ -73,19 +73,13 @@ export async function createBot(opts: {
 
 export async function listBots(opts: {
   teacherId: string;
-}): Promise<BotSummary[]> {
+}): Promise<BotDetail[]> {
   const bots = await db.lLMTeacherBot.findMany({
     where: { teacherId: opts.teacherId },
     orderBy: { createdAt: 'desc' },
   });
 
-  return bots.map((b) => ({
-    id: b.id,
-    name: b.name,
-    classId: b.classId,
-    createdAt: b.createdAt.toISOString(),
-    updatedAt: b.updatedAt.toISOString(),
-  }));
+  return bots.map(rowToDetail);
 }
 
 export async function getBot(opts: {
