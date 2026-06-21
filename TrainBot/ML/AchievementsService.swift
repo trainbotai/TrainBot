@@ -17,6 +17,8 @@ enum AchievementCatalog {
         .init(id: "first_model", title: "Primul AI", description: "Antreneaza primul model", icon: "brain.head.profile", target: 1),
         .init(id: "high_accuracy", title: "Mintea Stralucitoare", description: "Atinge 90% accuracy", icon: "sparkles", target: 1),
         .init(id: "bias_lesson", title: "Detectiv AI", description: "Completeaza lectia despre limitele AI", icon: "magnifyingglass.circle", target: 1),
+        .init(id: "label_lesson", title: "Etichetator", description: "Completeaza lectia despre etichete", icon: "tag.circle", target: 1),
+        .init(id: "more_data_lesson", title: "Colectionar de exemple", description: "Completeaza lectia despre importanta datelor", icon: "tray.full", target: 1),
     ]
 }
 
@@ -47,6 +49,14 @@ final class AchievementsService {
 
     func recordBiasLessonCompleted() {
         bump("bias_lesson", to: 1)
+    }
+
+    func recordLabelLessonCompleted() {
+        bump("label_lesson", to: 1)
+    }
+
+    func recordMoreDataLessonCompleted() {
+        bump("more_data_lesson", to: 1)
     }
 
     private func bump(_ id: String, to value: Int) {
