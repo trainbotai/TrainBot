@@ -120,3 +120,10 @@ export class LLMExamplesInvalidError extends AppError {
     this.name = 'LLMExamplesInvalidError';
   }
 }
+
+export class LLMTeacherBotNotFoundError extends AppError {
+  constructor() {
+    super(404, 'llm/teacher_bot_not_found', 'Teacher bot not found', 'Bot-ul nu a fost găsit.');
+    this.name = 'LLMTeacherBotNotFoundError';
+  }
+}

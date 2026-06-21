@@ -18,8 +18,9 @@ model Tenant {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  teachers Teacher[]
-  classes  Class[]
+  teachers       Teacher[]
+  classes        Class[]
+  llmTeacherBots LLMTeacherBot[]
 
   @@map("tenants")
 }
@@ -43,9 +44,10 @@ model Teacher {
   updatedAt    DateTime    @updatedAt
   lastLoginAt  DateTime?
 
-  tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  classes       Class[]
-  refreshTokens RefreshToken[]
+  tenant         Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  classes        Class[]
+  refreshTokens  RefreshToken[]
+  llmTeacherBots LLMTeacherBot[]
 
   @@index([tenantId])
   @@map("teachers")
@@ -69,10 +71,11 @@ model Class {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  teacher     Teacher      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  students    Student[]
-  assignments Assignment[]
+  tenant         Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  teacher        Teacher         @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  students       Student[]
+  assignments    Assignment[]
+  llmTeacherBots LLMTeacherBot[]
 
   @@index([tenantId])
   @@index([teacherId])
@@ -256,9 +259,10 @@ model LLMSessionVersion {
 
 model LLMQuery {
   id                       String            @id @default(cuid())
-  sessionId                String
-  versionId                String
+  sessionId                String?
+  versionId                String?
   studentId                String
+  botId                    String?
 
   userPrompt               String            @db.Text
   aiResponse               String            @db.Text
@@ -273,12 +277,14 @@ model LLMQuery {
 
   createdAt                DateTime          @default(now())
 
-  session                  LLMSession        @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  version                  LLMSessionVersion @relation(fields: [versionId], references: [id])
+  session                  LLMSession?       @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  version                  LLMSessionVersion? @relation(fields: [versionId], references: [id])
+  bot                      LLMTeacherBot?    @relation(fields: [botId], references: [id], onDelete: SetNull)
 
   @@index([sessionId])
   @@index([studentId, createdAt])
   @@index([outputModerationFlagged])
+  @@index([botId])
   @@map("llm_queries")
 }
 
@@ -302,4 +308,28 @@ enum AssignmentType {
   ML_TRAINING
   LLM_TRAINING
   MIXED
+}
+
+// MARK: - LLM Teacher Demo Bots (Phase 3B)
+
+model LLMTeacherBot {
+  id          String   @id @default(cuid())
+  tenantId    String
+  teacherId   String
+  classId     String?
+  name        String
+  instruction String
+  examples    Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant  Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  teacher Teacher    @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  class   Class?     @relation(fields: [classId], references: [id], onDelete: SetNull)
+  queries LLMQuery[]
+
+  @@index([tenantId])
+  @@index([teacherId])
+  @@index([classId])
+  @@map("llm_teacher_bots")
 }
