@@ -9,9 +9,28 @@ private struct LessonItem: Identifiable, Hashable {
     let subtitle: String
     let icon: String
     let achievementID: String
+    var isHandsOn: Bool = false
 }
 
 private let allLessons: [LessonItem] = [
+    // --- Lecții practice (hands-on) — apar primele ---
+    LessonItem(
+        id: "real_training",
+        title: "Antrenează primul tău model",
+        subtitle: "Fă poze reale și antrenează AI-ul tău",
+        icon: "cpu.fill",
+        achievementID: "real_training_lesson",
+        isHandsOn: true
+    ),
+    LessonItem(
+        id: "real_bot",
+        title: "Creează un bot AI",
+        subtitle: "Dă exemple și lansează propriul bot",
+        icon: "bubble.left.and.bubble.right.fill",
+        achievementID: "real_bot_lesson",
+        isHandsOn: true
+    ),
+    // --- Lecții conceptuale ---
     LessonItem(
         id: "bias",
         title: "Limitele AI",
@@ -102,9 +121,20 @@ struct LessonsLibraryView: View {
                         .foregroundStyle(isCompleted ? .white : AppColor.textSecondary)
                 }
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(lesson.title)
-                        .font(AppFont.title())
-                        .foregroundStyle(AppColor.textPrimary)
+                    HStack(spacing: 6) {
+                        Text(lesson.title)
+                            .font(AppFont.title())
+                            .foregroundStyle(AppColor.textPrimary)
+                        if lesson.isHandsOn {
+                            Text("practic")
+                                .font(AppFont.caption())
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(AppColor.purpleGradient)
+                                .clipShape(Capsule())
+                        }
+                    }
                     Text(lesson.subtitle)
                         .font(AppFont.bodySmall())
                         .foregroundStyle(AppColor.textSecondary)
@@ -133,6 +163,10 @@ struct LessonsLibraryView: View {
     @ViewBuilder
     private func destinationView(for lesson: LessonItem) -> some View {
         switch lesson.id {
+        case "real_training":
+            RealTrainingLessonView()
+        case "real_bot":
+            RealBotLessonView()
         case "bias":
             BiasLessonView()
         case "label":
