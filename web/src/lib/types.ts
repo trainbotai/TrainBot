@@ -79,6 +79,21 @@ export interface Assignment {
   _count: { submissions: number }
 }
 
+export interface BotExample {
+  input: string
+  output: string
+}
+
+export interface BotSummary {
+  id: string
+  name: string
+  instruction: string
+  examples: BotExample[]
+  classId: string | null
+  createdAt: string
+  updatedAt: string
+}
+
 export interface TeacherStats {
   classCount: number
   studentCount: number
