@@ -3,17 +3,10 @@ import {
   LLMSessionNotFoundError,
   LLMExamplesInvalidError,
   ForbiddenError,
-  LLMQuotaExceededError,
-  LLMContentBlockedInputError,
-  LLMContentBlockedOutputError,
-  LLMProviderUnavailableError,
 } from '../../lib/errors.js';
 import { env } from '../../config/index.js';
-import { logger } from '../../lib/logger.js';
-import { checkSafety } from './safety/pipeline.js';
-import { buildPrompt } from './prompt/builder.js';
-import { getProvider } from './providers/index.js';
 import type { Example, SessionSummary, SessionDetail, ChatHistoryItem } from './llm.types.js';
+import { runLLMQuery } from './llm.queryRunner.js';
 
 function validateExamples(examples: Example[]): void {
   if (examples.length > env.LLM_MAX_EXAMPLES_PER_VERSION) {
@@ -263,7 +256,6 @@ export interface QueryResult {
   response: string;
   inputTokens: number;
   outputTokens: number;
-  queryId: string;
 }
 
 export async function executeQuery(opts: {
@@ -271,11 +263,6 @@ export async function executeQuery(opts: {
   studentId: string;
   userPrompt: string;
 }): Promise<QueryResult> {
-  const quota = await getQuota(opts.studentId);
-  if (quota.remaining <= 0) {
-    throw new LLMQuotaExceededError(quota.limit);
-  }
-
   const session = await db.lLMSession.findFirst({
     where: { id: opts.sessionId, studentId: opts.studentId, deletedAt: null },
     include: { versions: { orderBy: { versionNumber: 'desc' }, take: 1 } },
@@ -284,77 +271,12 @@ export async function executeQuery(opts: {
   const currentVersion = session.versions[0];
   const examples = currentVersion.examples as unknown as Example[];
 
-  const inputSafety = await checkSafety(opts.userPrompt, 'input');
-  if (!inputSafety.safe) {
-    await db.lLMQuery.create({
-      data: {
-        sessionId: opts.sessionId,
-        versionId: currentVersion.id,
-        studentId: opts.studentId,
-        userPrompt: opts.userPrompt,
-        aiResponse: '',
-        inputModerationFlagged: true,
-        moderationCategories: inputSafety.categories
-          ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (inputSafety.categories as any)
-          : null,
-      },
-    });
-    throw new LLMContentBlockedInputError();
-  }
-
-  const messages = buildPrompt({ examples, userQuery: opts.userPrompt });
-
-  const provider = getProvider();
-  let chatResult;
-  try {
-    chatResult = await provider.chat({ messages, maxTokens: 300 });
-  } catch (err) {
-    logger.error({ err, sessionId: opts.sessionId }, 'LLM provider failed');
-    throw new LLMProviderUnavailableError();
-  }
-
-  const outputSafety = await checkSafety(chatResult.content, 'output');
-  if (!outputSafety.safe) {
-    await db.lLMQuery.create({
-      data: {
-        sessionId: opts.sessionId,
-        versionId: currentVersion.id,
-        studentId: opts.studentId,
-        userPrompt: opts.userPrompt,
-        aiResponse: chatResult.content,
-        outputModerationFlagged: true,
-        moderationCategories: outputSafety.categories
-          ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (outputSafety.categories as any)
-          : null,
-        inputTokens: chatResult.inputTokens,
-        outputTokens: chatResult.outputTokens,
-        groqLatencyMs: chatResult.latencyMs,
-      },
-    });
-    throw new LLMContentBlockedOutputError();
-  }
-
-  const saved = await db.lLMQuery.create({
-    data: {
-      sessionId: opts.sessionId,
-      versionId: currentVersion.id,
-      studentId: opts.studentId,
-      userPrompt: opts.userPrompt,
-      aiResponse: chatResult.content,
-      inputTokens: chatResult.inputTokens,
-      outputTokens: chatResult.outputTokens,
-      groqLatencyMs: chatResult.latencyMs,
-    },
+  return runLLMQuery({
+    studentId: opts.studentId,
+    userPrompt: opts.userPrompt,
+    examples,
+    auditContext: { type: 'session', sessionId: opts.sessionId, versionId: currentVersion.id },
   });
-
-  return {
-    response: chatResult.content,
-    inputTokens: chatResult.inputTokens,
-    outputTokens: chatResult.outputTokens,
-    queryId: saved.id,
-  };
 }
 
 export async function reportSession(opts: {
