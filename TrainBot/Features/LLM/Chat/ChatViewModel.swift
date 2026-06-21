@@ -6,6 +6,9 @@ import Observation
 final class ChatViewModel {
     let sessionId: String
     let sessionName: String
+    /// When non-nil, this ViewModel operates in teacher-bot mode:
+    /// streams from /teacher-bots/{id}/query and skips history loading.
+    let teacherBotId: String?
 
     private(set) var history: [ChatHistoryItem] = []
     private(set) var pendingMessage: PendingMessage?
@@ -16,14 +19,20 @@ final class ChatViewModel {
     private let service: LLMService
     private let streaming: LLMStreamingService
 
-    init(sessionId: String, sessionName: String, service: LLMService, streaming: LLMStreamingService) {
+    init(sessionId: String, sessionName: String, service: LLMService, streaming: LLMStreamingService, teacherBotId: String? = nil) {
         self.sessionId = sessionId
         self.sessionName = sessionName
         self.service = service
         self.streaming = streaming
+        self.teacherBotId = teacherBotId
     }
 
     func load() async {
+        // Teacher-bot chat has no history; only load quota so the counter is shown.
+        if teacherBotId != nil {
+            quota = try? await service.getQuota()
+            return
+        }
         isLoading = true
         errorMessage = nil
         defer { isLoading = false }
@@ -45,7 +54,12 @@ final class ChatViewModel {
         pendingMessage = pending
 
         do {
-            let stream = try await streaming.streamQuery(sessionId: sessionId, prompt: prompt)
+            let stream: AsyncThrowingStream<SSEEvent, Error>
+            if let botId = teacherBotId {
+                stream = try await streaming.streamTeacherBotQuery(botId: botId, prompt: prompt)
+            } else {
+                stream = try await streaming.streamQuery(sessionId: sessionId, prompt: prompt)
+            }
             for try await event in stream {
                 switch event {
                 case .chunk(let text):

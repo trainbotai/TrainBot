@@ -112,6 +112,20 @@ extension APIEndpoint {
     static func llmQuota() -> Self {
         Self(method: .get, path: "/student/llm/quota", body: nil)
     }
+
+    // MARK: - Teacher bots
+
+    static func listTeacherBots() -> Self {
+        Self(method: .get, path: "/student/llm/teacher-bots", body: nil)
+    }
+
+    struct TeacherBotQueryBody: Encodable {
+        let prompt: String
+    }
+
+    static func teacherBotQuery(botId: String, prompt: String) -> Self {
+        Self(method: .post, path: "/student/llm/teacher-bots/\(botId)/query", body: TeacherBotQueryBody(prompt: prompt))
+    }
 }
 
 struct MLLabelSyncPayload: Encodable {

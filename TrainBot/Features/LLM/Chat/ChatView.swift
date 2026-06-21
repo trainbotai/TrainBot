@@ -4,6 +4,8 @@ struct ChatView: View {
     @Environment(AuthSession.self) private var authSession
     let sessionId: String
     let sessionName: String
+    /// When non-nil, the chat targets the teacher-bot query endpoint.
+    var teacherBotId: String? = nil
 
     @State private var vm: ChatViewModel?
     @State private var inputText: String = ""
@@ -18,7 +20,13 @@ struct ChatView: View {
                     .task {
                         let service = LLMService(authSession: authSession)
                         let streaming = LLMStreamingService(authSession: authSession)
-                        let viewModel = ChatViewModel(sessionId: sessionId, sessionName: sessionName, service: service, streaming: streaming)
+                        let viewModel = ChatViewModel(
+                            sessionId: sessionId,
+                            sessionName: sessionName,
+                            service: service,
+                            streaming: streaming,
+                            teacherBotId: teacherBotId
+                        )
                         await viewModel.load()
                         vm = viewModel
                     }
@@ -27,9 +35,11 @@ struct ChatView: View {
         .navigationTitle(sessionName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button { showReport = true } label: {
-                    Image(systemName: "flag")
+            if teacherBotId == nil {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button { showReport = true } label: {
+                        Image(systemName: "flag")
+                    }
                 }
             }
         }
