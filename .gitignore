@@ -45,3 +45,4 @@ fastlane/test_output
 
 # xcode-build-server (per-machine LSP config)
 buildServer.json
+deploy/web-dist/
