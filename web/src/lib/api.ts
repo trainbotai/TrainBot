@@ -9,10 +9,34 @@ export class ApiError extends Error {
   }
 }
 
+// Un singur refresh concurent: toate cererile care primesc 401 simultan
+// așteaptă același promise, nu declanșează N refresh-uri paralele.
+let refreshPromise: Promise<boolean> | null = null
+
+async function tryRefresh(): Promise<boolean> {
+  // import dinamic — evită ciclul de import la evaluarea modulelor
+  const { useAuthStore } = await import('../auth/authStore')
+  if (!refreshPromise) {
+    refreshPromise = useAuthStore
+      .getState()
+      .refresh()
+      .then(() => true)
+      .catch(async () => {
+        await useAuthStore.getState().logout()
+        return false
+      })
+      .finally(() => {
+        refreshPromise = null
+      })
+  }
+  return refreshPromise
+}
+
 export async function apiFetch<T>(
   path: string,
   options: RequestInit = {},
   accessToken?: string,
+  _retried = false,
 ): Promise<T> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -23,6 +47,15 @@ export async function apiFetch<T>(
   const res = await fetch(`${BASE_URL}${path}`, { ...options, headers })
 
   if (!res.ok) {
+    // Access token expirat → un singur refresh + retry, apoi logout la eșec.
+    if (res.status === 401 && accessToken && !_retried && !path.startsWith('/auth/')) {
+      const refreshed = await tryRefresh()
+      if (refreshed) {
+        const { useAuthStore } = await import('../auth/authStore')
+        const newToken = useAuthStore.getState().accessToken ?? undefined
+        return apiFetch<T>(path, options, newToken, true)
+      }
+    }
     let problem: ProblemDetail | undefined
     try { problem = await res.json() } catch { /* ignore non-JSON body */ }
     const message = problem?.detail ?? problem?.title ?? `HTTP ${res.status}`

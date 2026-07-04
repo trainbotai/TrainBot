@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { apiFetch } from '../lib/api'
+import { queryClient } from '../lib/queryClient'
 import { saveTokens, loadTokens, clearTokens } from '../lib/tokens'
 import type { AuthResponse, AuthUser } from '../lib/types'
 
@@ -69,6 +70,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       } catch { /* swallow — local logout always succeeds */ }
     }
     clearTokens()
+    // Calculatoare partajate în școli: fără clear, următorul cont vede datele
+    // precedentului din cache (staleTime 30s + gcTime).
+    queryClient.clear()
     set({ accessToken: null, refreshToken: null, user: null, isAuthenticated: false })
   },
 
