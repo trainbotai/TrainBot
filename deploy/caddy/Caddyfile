@@ -1,0 +1,20 @@
+{
+	email moldluca@gmail.com
+}
+
+api.trainbot.moldluca.tech:33443 {
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+	}
+	reverse_proxy backend:3000
+}
+
+app.trainbot.moldluca.tech:33443 {
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+	}
+	root * /srv/web
+	encode gzip
+	try_files {path} /index.html
+	file_server
+}

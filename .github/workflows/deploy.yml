@@ -1,12 +1,10 @@
 name: Deploy to production
 
+# DEZACTIVAT auto-deploy (2026-07-04): pipeline-ul țintește dropletul DigitalOcean
+# distrus pe 2026-06-12 (secrets TRAINBOT_HOST/TRAINBOT_SSH_KEY învechite).
+# Deploy-ul real e manual pe Junioru: rsync + docker compose (vezi deploy/ și
+# TrainBot/memory/prod.md). De rescris când există o țintă de deploy stabilă.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'backend/**'
-      - 'web/**'
-      - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
 concurrency:

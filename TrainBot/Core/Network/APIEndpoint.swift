@@ -15,7 +15,7 @@ struct APIEndpoint {
     #if DEBUG
     static let baseURL = "http://localhost:3000/api/v1"
     #else
-    static let baseURL = "https://trainbot.perpetuummobile.tech/api/v1"
+    static let baseURL = "https://api.trainbot.moldluca.tech:33443/api/v1"
     #endif
 
     func urlRequest() throws -> URLRequest {
@@ -58,6 +58,73 @@ extension APIEndpoint {
 
     static func syncMLProject(_ payload: MLProjectSyncPayload) -> Self {
         return Self(method: .post, path: "/student/ml/projects", body: payload)
+    }
+}
+
+extension APIEndpoint {
+    // MARK: - LLM Student endpoints
+
+    static func listLLMSessions() -> Self {
+        Self(method: .get, path: "/student/llm/sessions", body: nil)
+    }
+
+    static func getLLMSession(id: String) -> Self {
+        Self(method: .get, path: "/student/llm/sessions/\(id)", body: nil)
+    }
+
+    struct CreateSessionBody: Encodable {
+        let name: String
+        let examples: [Example]
+        let assignmentId: String?
+        struct Example: Encodable { let user: String; let ai: String }
+    }
+
+    static func createLLMSession(_ body: CreateSessionBody) -> Self {
+        Self(method: .post, path: "/student/llm/sessions", body: body)
+    }
+
+    struct AddVersionBody: Encodable {
+        let examples: [CreateSessionBody.Example]
+    }
+
+    static func addLLMVersion(sessionId: String, _ body: AddVersionBody) -> Self {
+        Self(method: .post, path: "/student/llm/sessions/\(sessionId)/versions", body: body)
+    }
+
+    static func deleteLLMSession(id: String) -> Self {
+        Self(method: .delete, path: "/student/llm/sessions/\(id)", body: nil)
+    }
+
+    static func listLLMQueries(sessionId: String, version: Int? = nil) -> Self {
+        var path = "/student/llm/sessions/\(sessionId)/queries"
+        if let v = version { path += "?version=\(v)" }
+        return Self(method: .get, path: path, body: nil)
+    }
+
+    struct ReportSessionBody: Encodable {
+        let reason: String?
+    }
+
+    static func reportLLMSession(sessionId: String, reason: String?) -> Self {
+        Self(method: .post, path: "/student/llm/sessions/\(sessionId)/report", body: ReportSessionBody(reason: reason))
+    }
+
+    static func llmQuota() -> Self {
+        Self(method: .get, path: "/student/llm/quota", body: nil)
+    }
+
+    // MARK: - Teacher bots
+
+    static func listTeacherBots() -> Self {
+        Self(method: .get, path: "/student/llm/teacher-bots", body: nil)
+    }
+
+    struct TeacherBotQueryBody: Encodable {
+        let prompt: String
+    }
+
+    static func teacherBotQuery(botId: String, prompt: String) -> Self {
+        Self(method: .post, path: "/student/llm/teacher-bots/\(botId)/query", body: TeacherBotQueryBody(prompt: prompt))
     }
 }
 

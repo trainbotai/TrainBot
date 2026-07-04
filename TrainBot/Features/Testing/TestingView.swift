@@ -4,6 +4,7 @@ import PhotosUI
 struct TestingView: View {
     @StateObject private var vm = TestingViewModel(context: PersistenceController.shared.container.viewContext)
     @State private var pickerItem: PhotosPickerItem?
+    @State private var confettiTrigger = 0
 
     var body: some View {
         ScrollView {
@@ -14,11 +15,21 @@ struct TestingView: View {
         }
         .background(AppColor.surfaceLight)
         .navigationTitle("Testeaza")
+        .confetti(trigger: $confettiTrigger)
         .onAppear { vm.loadProjects() }
         .onChange(of: pickerItem) { _, item in
             Task {
                 guard let item, let data = try? await item.loadTransferable(type: Data.self), let img = UIImage(data: data) else { return }
+                Haptics.tap()
                 await vm.predict(img)
+                if let pred = vm.prediction {
+                    if pred.confidence > 0.6 {
+                        Haptics.success()
+                        confettiTrigger += 1
+                    } else {
+                        Haptics.warning()
+                    }
+                }
                 pickerItem = nil
             }
         }
@@ -71,11 +82,33 @@ struct TestingView: View {
                 Text("Ma gandesc...").font(AppFont.body())
             } else if let pred = vm.prediction {
                 AppCard {
-                    VStack(spacing: 8) {
+                    VStack(spacing: 12) {
                         MascotView(state: pred.confidence > 0.6 ? .happy : .confused, size: 80)
                         Text("Cred ca e:").font(AppFont.bodySmall()).foregroundStyle(AppColor.textSecondary)
                         Text(pred.label).font(AppFont.headline()).foregroundStyle(AppColor.primaryPurple)
                         Text("\(Int(pred.confidence * 100))% sigur").font(AppFont.body()).foregroundStyle(AppColor.textSecondary)
+
+                        if pred.allConfidences.count > 1 {
+                            Divider()
+                            Text("Cat de sigur e botul:").font(AppFont.caption()).foregroundStyle(AppColor.textSecondary)
+                            VStack(spacing: 8) {
+                                ForEach(pred.allConfidences.sorted { $0.value > $1.value }, id: \.key) { label, conf in
+                                    HStack(spacing: 8) {
+                                        Text(label)
+                                            .font(AppFont.bodySmall())
+                                            .foregroundStyle(AppColor.textPrimary)
+                                            .frame(width: 90, alignment: .leading)
+                                            .lineLimit(1)
+                                        ProgressView(value: conf)
+                                            .tint(label == pred.label ? AppColor.primaryPurple : AppColor.textSecondary)
+                                        Text("\(Int(conf * 100))%")
+                                            .font(AppFont.caption())
+                                            .foregroundStyle(AppColor.textSecondary)
+                                            .frame(width: 34, alignment: .trailing)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
