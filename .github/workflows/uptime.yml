@@ -1,0 +1,24 @@
+# Monitorizare uptime prod (Junioru) — rulează din GitHub runners (extern).
+# La eșec, workflow-ul pică → GitHub trimite email automat.
+# Notă: GitHub dezactivează cron-urile după 60 zile fără activitate în repo.
+name: Uptime check
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: API health
+        run: |
+          curl -fsS -m 20 --retry 2 --retry-delay 10 \
+            https://api.trainbot.moldluca.tech:33443/health \
+            | tee /dev/stderr | grep -q '"status":"ok"'
+
+      - name: Dashboard profesor
+        run: |
+          curl -fsS -m 20 --retry 2 --retry-delay 10 -o /dev/null -w '%{http_code}\n' \
+            https://app.trainbot.moldluca.tech:33443/ | grep -q '^200$'
