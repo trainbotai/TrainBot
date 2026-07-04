@@ -65,7 +65,7 @@ async function setupTeacherAndStudent() {
     .set('Authorization', `Bearer ${teacherToken}`)
     .send({ username: 'maria', password: 'parola123' });
   const username = studentCreate.body.username as string;
-  const password = studentCreate.body.password as string;
+  const password = 'parola123';
 
   const studentLogin = await request(app).post('/api/v1/auth/student/login').send({
     classCode,

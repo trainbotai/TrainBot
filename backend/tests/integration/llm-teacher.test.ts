@@ -57,20 +57,14 @@ async function setupFullStack() {
     .send({ name: 'A', code: `A${ts}` });
 
   const assignmentRes = await request(app)
-    .post('/api/v1/teacher/assignments')
+    .post(`/api/v1/teacher/classes/${classRes.body.id}/assignments`)
     .set('Authorization', `Bearer ${teacherToken}`)
     .send({
-      classId: classRes.body.id,
       title: 'Bot prietenos',
       description: 'Creează un bot',
+      type: 'LLM_TRAINING',
     });
   const assignmentId = assignmentRes.body.id;
-
-  // Mark assignment as LLM_TRAINING (DB directly — assignment route currently defaults to ML_TRAINING)
-  await db.assignment.update({
-    where: { id: assignmentId },
-    data: { type: 'LLM_TRAINING' },
-  });
 
   const studentCreate = await request(app)
     .post(`/api/v1/teacher/classes/${classRes.body.id}/students`)
@@ -80,7 +74,7 @@ async function setupFullStack() {
   const studentLogin = await request(app).post('/api/v1/auth/student/login').send({
     classCode: classRes.body.code,
     username: studentCreate.body.username,
-    password: studentCreate.body.password,
+    password: 'parola123',
   });
 
   return {

@@ -355,6 +355,9 @@ export async function teacherGetSessionDetail(opts: {
     where: {
       id: opts.sessionId,
       deletedAt: null,
+      // Privacy (design 3A): profesorul vede sesiunile legate de o temă SAU
+      // raportate de copil — nu sesiunile personale neraportate.
+      OR: [{ assignmentId: { not: null } }, { reports: { some: {} } }],
       student: { class: { teacherId: opts.teacherId } },
     },
     include: { versions: { orderBy: { versionNumber: 'asc' } } },

@@ -3,7 +3,13 @@ import request from 'supertest';
 import { createApp } from '../../src/app.js';
 import { db } from '../../src/lib/db.js';
 
-const mockChat = vi.fn();
+// vi.mock e hoisted la începutul fișierului — mock-urile referite în factory
+// trebuie create cu vi.hoisted, altfel ReferenceError la colectare.
+const { mockChat, mockModeration } = vi.hoisted(() => ({
+  mockChat: vi.fn(),
+  mockModeration: vi.fn(),
+}));
+
 vi.mock('../../src/modules/llm/providers/groq.js', () => ({
   GroqProvider: vi.fn().mockImplementation(() => ({
     name: 'groq',
@@ -11,7 +17,6 @@ vi.mock('../../src/modules/llm/providers/groq.js', () => ({
   })),
 }));
 
-const mockModeration = vi.fn();
 vi.mock('../../src/modules/llm/safety/moderation.js', async () => {
   const actual = await vi.importActual<
     typeof import('../../src/modules/llm/safety/moderation.js')
@@ -65,7 +70,7 @@ async function setupAndCreateSession() {
   const studentLogin = await request(app).post('/api/v1/auth/student/login').send({
     classCode,
     username: studentCreate.body.username,
-    password: studentCreate.body.password,
+    password: 'parola123',
   });
   const studentToken = studentLogin.body.accessToken;
 
@@ -109,7 +114,7 @@ describe('LLM query flow + safety', () => {
       .send({ prompt: 'te omor!' });
 
     expect(res.status).toBe(400);
-    expect(res.body.code).toBe('llm/content_blocked_input');
+    expect(res.body.type).toContain('llm/content_blocked_input');
     expect(mockChat).not.toHaveBeenCalled();
 
     // Verify audit logged
@@ -131,7 +136,7 @@ describe('LLM query flow + safety', () => {
       .send({ prompt: 'something subtle' });
 
     expect(res.status).toBe(400);
-    expect(res.body.code).toBe('llm/content_blocked_input');
+    expect(res.body.type).toContain('llm/content_blocked_input');
     expect(mockChat).not.toHaveBeenCalled();
   });
 
@@ -154,7 +159,7 @@ describe('LLM query flow + safety', () => {
       .send({ prompt: 'innocent prompt' });
 
     expect(res.status).toBe(502);
-    expect(res.body.code).toBe('llm/content_blocked_output');
+    expect(res.body.type).toContain('llm/content_blocked_output');
 
     const queries = await db.lLMQuery.findMany();
     expect(queries).toHaveLength(1);
@@ -197,7 +202,7 @@ describe('LLM query flow + safety', () => {
       .send({ prompt: 'one more' });
 
     expect(res.status).toBe(429);
-    expect(res.body.code).toBe('llm/quota_exceeded');
+    expect(res.body.type).toContain('llm/quota_exceeded');
   });
 
   it('returns 503 on provider failure', async () => {
@@ -211,6 +216,6 @@ describe('LLM query flow + safety', () => {
       .send({ prompt: 'salut' });
 
     expect(res.status).toBe(503);
-    expect(res.body.code).toBe('llm/groq_unavailable');
+    expect(res.body.type).toContain('llm/groq_unavailable');
   });
 });
