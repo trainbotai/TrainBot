@@ -333,3 +333,18 @@ model LLMTeacherBot {
   @@index([classId])
   @@map("llm_teacher_bots")
 }
+
+// MARK: - Pilot requests (lead-uri din site-ul de marketing, endpoint public)
+
+model PilotRequest {
+  id        String   @id @default(cuid())
+  name      String
+  school    String
+  email     String
+  message   String?
+  locale    String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@map("pilot_requests")
+}

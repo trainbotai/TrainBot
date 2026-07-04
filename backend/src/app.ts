@@ -4,7 +4,7 @@ import cors from 'cors';
 import compression from 'compression';
 import { env } from './config/index.js';
 import { errorHandler } from './middleware/errorHandler.js';
-import { generalLimiter, authLimiter } from './middleware/rateLimit.js';
+import { generalLimiter, authLimiter, pilotLimiter } from './middleware/rateLimit.js';
 import { authRouter } from './modules/auth/auth.routes.js';
 import { classesRouter } from './modules/classes/classes.routes.js';
 import { classStudentsRouter, studentsRouter } from './modules/students/students.routes.js';
@@ -12,6 +12,7 @@ import { studentMlRouter, teacherMlRouter, sharedMlRouter } from './modules/ml/m
 import { teacherAssignmentsRouter, studentAssignmentsRouter } from './modules/assignments/assignments.routes.js';
 import { studentLlmRouter, teacherLlmRouter } from './modules/llm/llm.routes.js';
 import { teacherBotsRouter, studentBotsRouter } from './modules/llm/teacherBots/teacherBots.routes.js';
+import { pilotRouter } from './modules/pilot/pilot.routes.js';
 
 export function createApp(): Application {
   const app = express();
@@ -52,6 +53,9 @@ export function createApp(): Application {
   app.use('/api/v1/teacher/llm', teacherLlmRouter);
   app.use('/api/v1/teacher/llm/bots', teacherBotsRouter);
   app.use('/api/v1/student/llm', studentBotsRouter);
+  // Public (fără auth): lead-uri din formularul de pilot de pe site-ul de marketing.
+  // Necesită originea site-ului în CORS_ORIGINS (https://trainbot.moldluca.tech).
+  app.use('/api/v1/pilot-request', pilotLimiter, pilotRouter);
 
   // 404 fallback
   app.use((req, res) => {

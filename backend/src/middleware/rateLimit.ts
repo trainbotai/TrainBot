@@ -30,3 +30,18 @@ export const authLimiter = rateLimit({
     detail: 'Try again in a few minutes.',
   },
 });
+
+// Endpoint public de lead-uri (formularul de pilot) — strict, e singura rută fără auth
+export const pilotLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: skipInTests,
+  message: {
+    type: 'https://trainbot.ro/errors/too_many_requests',
+    title: 'Too many requests',
+    status: 429,
+    detail: 'Try again in an hour, or email us directly.',
+  },
+});
