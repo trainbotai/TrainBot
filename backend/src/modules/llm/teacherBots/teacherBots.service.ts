@@ -205,6 +205,7 @@ export async function queryBotAsStudent(opts: {
     studentId: opts.studentId,
     userPrompt: opts.userPrompt,
     examples,
+    instruction: bot.instruction,
     auditContext: { type: 'bot', botId: opts.botId },
   });
 }

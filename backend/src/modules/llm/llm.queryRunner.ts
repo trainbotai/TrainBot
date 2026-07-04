@@ -20,6 +20,8 @@ export interface RunQueryOpts {
   studentId: string;
   userPrompt: string;
   examples: Example[];
+  /** Instrucțiunea profesorului (doar boți demo). */
+  instruction?: string;
   auditContext:
     | { type: 'session'; sessionId: string; versionId: string }
     | { type: 'bot'; botId: string };
@@ -71,7 +73,7 @@ export async function runLLMQuery(opts: RunQueryOpts): Promise<RunQueryResult> {
     throw new LLMContentBlockedInputError();
   }
 
-  const messages = buildPrompt({ examples: opts.examples, userQuery: opts.userPrompt });
+  const messages = buildPrompt({ examples: opts.examples, userQuery: opts.userPrompt, instruction: opts.instruction });
 
   const provider = getProvider();
   let chatResult;

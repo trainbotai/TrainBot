@@ -35,4 +35,22 @@ describe('buildPrompt', () => {
     expect(messages[0]!.role).toBe('system');
     expect(messages[1]).toEqual({ role: 'user', content: 'Salut' });
   });
+
+  it('includes teacher instruction in system prompt (demo bots)', () => {
+    const messages = buildPrompt({
+      examples: [],
+      userQuery: 'Salut',
+      instruction: 'Ești un bot despre dinozauri. Vorbește doar despre dinozauri.',
+    });
+    const system = messages[0]!.content;
+    expect(system).toContain('Ești un bot despre dinozauri');
+    // instrucțiunea vine DUPĂ reguli (regulile au prioritate) și ÎNAINTE de exemple
+    expect(system.indexOf('prioritate absolută')).toBeLessThan(system.indexOf('dinozauri'));
+    expect(system.indexOf('dinozauri')).toBeLessThan(system.indexOf('exemplele tale de antrenament'));
+  });
+
+  it('omits instruction section when not provided', () => {
+    const messages = buildPrompt({ examples: [], userQuery: 'Salut' });
+    expect(messages[0]!.content).not.toContain('Instrucțiunea profesorului');
+  });
 });

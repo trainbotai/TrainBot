@@ -39,4 +39,18 @@ describe('checkKeywords', () => {
     // "sinucid" without diacritics should match "sinucid" with diacritics
     expect(checkKeywords('vreau sa ma sinucid').safe).toBe(false);
   });
+
+  it('matches Romanian inflections via prefix rules', () => {
+    expect(checkKeywords('îl omoară pe robot').safe).toBe(false);
+    expect(checkKeywords('pornografie').safe).toBe(false);
+  });
+
+  it('does NOT block common Romanian words (false positives istorice)', () => {
+    expect(checkKeywords('pornim jocul!').safe).toBe(true);
+    expect(checkKeywords('pornește robotul').safe).toBe(true);
+    expect(checkKeywords('am pornit antrenamentul').safe).toBe(true);
+    expect(checkKeywords('un sextet de muzicieni').safe).toBe(true);
+    expect(checkKeywords('citim din Dickens').safe).toBe(true);
+    expect(checkKeywords('Cum antrenez robotul să recunoască pisici?').safe).toBe(true);
+  });
 });

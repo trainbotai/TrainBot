@@ -113,6 +113,8 @@ model AssignmentSubmission {
   submittedAt     DateTime @default(now())
 
   assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  // GDPR art. 17: la ștergerea elevului dispar și submisiile (notes = text scris de copil)
+  student    Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@unique([assignmentId, studentId])
   @@index([studentId])
@@ -136,6 +138,9 @@ model Student {
   refreshTokens RefreshToken[]
   mlProjects    MLProject[]
   llmSessions   LLMSession[]
+  llmQueries    LLMQuery[]
+  llmReports    LLMReport[]
+  submissions   AssignmentSubmission[]
 
   @@unique([classId, username])
   @@index([tenantId])
@@ -280,6 +285,9 @@ model LLMQuery {
   session                  LLMSession?       @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   version                  LLMSessionVersion? @relation(fields: [versionId], references: [id])
   bot                      LLMTeacherBot?    @relation(fields: [botId], references: [id], onDelete: SetNull)
+  // GDPR art. 17: query-urile către boții profesorului au sessionId null —
+  // fără acest FK rămâneau orfane (cu userPrompt-ul copilului) la ștergerea elevului
+  student                  Student           @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@index([sessionId])
   @@index([studentId, createdAt])
@@ -299,6 +307,7 @@ model LLMReport {
   createdAt   DateTime    @default(now())
 
   session     LLMSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  student     Student     @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@index([teacherId, reviewed])
   @@map("llm_reports")
