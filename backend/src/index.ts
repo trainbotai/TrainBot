@@ -13,7 +13,9 @@ async function main() {
 
   const shutdown = async (signal: string) => {
     logger.info({ signal }, 'Shutting down');
-    server.close();
+    // Așteaptă cererile in-flight (inclusiv stream-urile SSE active către copii)
+    // să se închidă înainte de a rupe conexiunea DB.
+    await new Promise<void>((resolve) => server.close(() => resolve()));
     await db.$disconnect();
     process.exit(0);
   };

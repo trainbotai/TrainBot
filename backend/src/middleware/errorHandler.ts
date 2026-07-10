@@ -1,5 +1,7 @@
 import type { ErrorRequestHandler } from 'express';
 import { ZodError } from 'zod';
+import { MulterError } from 'multer';
+import { Prisma } from '@prisma/client';
 import { AppError } from '../lib/errors.js';
 import { logger } from '../lib/logger.js';
 
@@ -23,6 +25,31 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
       detail: 'One or more fields failed validation',
       instance: req.originalUrl,
       fields: err.flatten().fieldErrors,
+    });
+    return;
+  }
+
+  // Upload prea mare / prea multe fișiere → 413, nu 500 cu log de eroare fals.
+  if (err instanceof MulterError) {
+    const tooLarge = err.code === 'LIMIT_FILE_SIZE';
+    res.status(tooLarge ? 413 : 400).json({
+      type: `https://trainbot.ro/errors/${tooLarge ? 'payload_too_large' : 'bad_upload'}`,
+      title: tooLarge ? 'File too large' : 'Invalid upload',
+      status: tooLarge ? 413 : 400,
+      detail: err.message,
+      instance: req.originalUrl,
+    });
+    return;
+  }
+
+  // Coliziune pe constrângere unică (cod clasă / email / versiune concurentă) → 409.
+  if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002') {
+    res.status(409).json({
+      type: 'https://trainbot.ro/errors/conflict',
+      title: 'Conflict',
+      status: 409,
+      detail: 'A record with the same unique value already exists.',
+      instance: req.originalUrl,
     });
     return;
   }
