@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 import Modal from './Modal'
 import { apiFetch, ApiError } from '../lib/api'
 import { useAuthStore } from '../auth/authStore'
@@ -12,15 +13,28 @@ export default function EditClassModal({ open, onClose, classId, initial }: {
 }) {
   const accessToken = useAuthStore((s) => s.accessToken)
   const qc = useQueryClient()
+  const navigate = useNavigate()
   const [name, setName] = useState(initial.name)
   const [description, setDescription] = useState(initial.description ?? '')
   const [error, setError] = useState<string | null>(null)
+
+  // Componenta e montată permanent în ClassDetailPage; fără reset la deschidere
+  // ar afișa valorile de la primul mount (stale) după o editare + redeschidere.
+  useEffect(() => {
+    if (open) {
+      setName(initial.name)
+      setDescription(initial.description ?? '')
+      setError(null)
+    }
+  }, [open, initial.name, initial.description])
 
   const update = useMutation({
     mutationFn: () =>
       apiFetch(
         `/teacher/classes/${classId}`,
-        { method: 'PATCH', body: JSON.stringify({ name: name.trim(), description: description.trim() || undefined }) },
+        // trimitem description explicit (inclusiv '') ca golirea să persiste;
+        // undefined ar face backend-ul să păstreze valoarea veche.
+        { method: 'PATCH', body: JSON.stringify({ name: name.trim(), description: description.trim() }) },
         accessToken ?? undefined,
       ),
     onSuccess: () => {
@@ -37,7 +51,7 @@ export default function EditClassModal({ open, onClose, classId, initial }: {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['classes'] })
       onClose()
-      window.location.href = '/'
+      navigate('/') // navigare SPA, nu full reload
     },
     onError: (err) => setError(err instanceof ApiError ? err.message : 'Eroare'),
   })

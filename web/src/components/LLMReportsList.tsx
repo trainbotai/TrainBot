@@ -13,6 +13,7 @@ export default function LLMReportsList() {
     queryFn: () =>
       apiFetch<LLMReportsResponse>('/teacher/llm/reports', {}, accessToken ?? undefined),
     refetchInterval: 30_000,
+    refetchIntervalInBackground: false,
   })
 
   const markReviewed = useMutation({

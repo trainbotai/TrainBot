@@ -11,11 +11,13 @@ export default function Layout() {
   const isTeacher = useAuthStore((s) => s.user?.role === 'teacher')
   const navigate = useNavigate()
 
+  // Aceeași cheie ca LLMReportsList → un singur fetch partajat (nu 2× pe /reports).
   const { data: reportsData } = useQuery({
-    queryKey: ['llm-reports-count'],
+    queryKey: ['llm-reports'],
     queryFn: () =>
       apiFetch<LLMReportsResponse>('/teacher/llm/reports', {}, accessToken ?? undefined),
     refetchInterval: 30_000,
+    refetchIntervalInBackground: false,
     enabled: isTeacher && !!accessToken,
   })
   const unreviewedCount = (reportsData?.reports ?? []).filter((r) => !r.reviewed).length
