@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import compression from 'compression';
 import { env } from './config/index.js';
+import { db } from './lib/db.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { generalLimiter, authLimiter, pilotLimiter } from './middleware/rateLimit.js';
 import { authRouter } from './modules/auth/auth.routes.js';
@@ -30,8 +31,14 @@ export function createApp(): Application {
   app.use(express.json({ limit: '1mb' }));
   app.use(express.urlencoded({ extended: false, limit: '1mb' }));
 
-  app.get('/health', (_req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  app.get('/health', async (_req, res) => {
+    try {
+      await db.$queryRaw`SELECT 1`;
+      res.json({ status: 'ok', timestamp: new Date().toISOString() });
+    } catch {
+      // Container „up" dar Postgres picat = 503, ca monitorizarea să prindă asta.
+      res.status(503).json({ status: 'degraded', db: 'unavailable', timestamp: new Date().toISOString() });
+    }
   });
 
   app.get('/api/v1', (_req, res) => {

@@ -176,6 +176,42 @@ describe('Images', () => {
     expect(res.status).toBe(400);
   });
 
+  it('rejects oversize upload with 413', async () => {
+    const ctx = await setup();
+    // > UPLOAD_MAX_BYTES (5MB): buffer de 6MB
+    const big = Buffer.alloc(6 * 1024 * 1024, 1);
+    const res = await request(app)
+      .post(`/api/v1/student/ml/projects/${ctx.projectId}/labels/${ctx.labelId}/images`)
+      .set('Authorization', `Bearer ${ctx.studentToken}`)
+      .field('clientId', 'img-big')
+      .attach('image', big, 'huge.jpg');
+    expect(res.status).toBe(413);
+  });
+
+  it('sync removing a label deletes its image files from disk', async () => {
+    const fs = await import('node:fs/promises');
+    const path = await import('node:path');
+    const ctx = await setup();
+    const upload = await request(app)
+      .post(`/api/v1/student/ml/projects/${ctx.projectId}/labels/${ctx.labelId}/images`)
+      .set('Authorization', `Bearer ${ctx.studentToken}`)
+      .field('clientId', 'img-orphan')
+      .attach('image', await makeJpegBuffer(), 'photo.jpg');
+    const fullPath = path.join(process.env.UPLOAD_DIR!, (upload.body as { filename: string }).filename);
+    await fs.access(fullPath); // exists
+
+    // Re-sync same project WITHOUT the label → label (and its image) removed
+    await request(app)
+      .post('/api/v1/student/ml/projects')
+      .set('Authorization', `Bearer ${ctx.studentToken}`)
+      .send({ clientId: 'p1', name: 'My Proj', labels: [] })
+      .expect(200);
+
+    let stillExists = true;
+    try { await fs.access(fullPath); } catch { stillExists = false; }
+    expect(stillExists).toBe(false);
+  });
+
   it('deleting project removes image files from disk', async () => {
     const fs = await import('node:fs/promises');
     const path = await import('node:path');

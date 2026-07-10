@@ -29,6 +29,8 @@ export async function syncProject(opts: {
   // Detect first sync (before any project exists for this student) for email notification
   const isFirstSync = (await db.mLProject.count({ where: { studentId } })) === 0;
 
+  const orphanFilenames: string[] = [];
+
   const result = await db.$transaction(async (tx) => {
     const project = await tx.mLProject.upsert({
       where: { studentId_clientId: { studentId, clientId: body.clientId } },
@@ -51,13 +53,20 @@ export async function syncProject(opts: {
 
     const incomingClientIds = body.labels.map((l) => l.clientId);
 
-    // Delete labels removed on client (replace-style sync)
-    await tx.mLLabel.deleteMany({
-      where: {
-        projectId: project.id,
-        ...(incomingClientIds.length > 0 ? { clientId: { notIn: incomingClientIds } } : {}),
-      },
+    // Colectăm filename-urile imaginilor din label-urile care vor fi șterse,
+    // ca să curățăm fișierele de pe disc după commit (altfel rămân orfane).
+    const removedFilter = {
+      projectId: project.id,
+      ...(incomingClientIds.length > 0 ? { clientId: { notIn: incomingClientIds } } : {}),
+    };
+    const orphanImages = await tx.mLImage.findMany({
+      where: { label: removedFilter },
+      select: { filename: true },
     });
+    orphanFilenames.push(...orphanImages.map((i) => i.filename));
+
+    // Delete labels removed on client (replace-style sync)
+    await tx.mLLabel.deleteMany({ where: removedFilter });
 
     // Upsert each label
     for (const label of body.labels) {
@@ -82,6 +91,12 @@ export async function syncProject(opts: {
       },
     });
   });
+
+  // Best-effort cleanup al fișierelor rămase după ștergerea label-urilor (după commit).
+  if (orphanFilenames.length > 0) {
+    const { deleteImage } = await import('./image.storage.js');
+    await Promise.all(orphanFilenames.map((f) => deleteImage(f).catch(() => undefined)));
+  }
 
   // Fire-and-forget email on first sync (don't block sync response)
   if (isFirstSync) {

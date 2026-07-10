@@ -20,7 +20,10 @@ RUN apk add --no-cache openssl
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 trainbot
 
-COPY --from=builder /app/node_modules ./node_modules
+# Runtime primește DOAR dependențele de producție (fără typescript/vitest/testcontainers)
+# + clientul Prisma generat de builder (peste @prisma/client care e dep de producție).
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 COPY package*.json ./
