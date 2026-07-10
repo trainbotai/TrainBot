@@ -4,6 +4,7 @@ struct SettingsView: View {
     @AppStorage("botName") private var botName = "TrainBot"
     @AppStorage("soundEnabled") private var soundEnabled = true
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = true
+    @AppStorage("uploadImagesEnabled") private var uploadImagesEnabled = false
     @Environment(AuthSession.self) private var authSession
     @Environment(MLSyncService.self) private var mlSync
 
@@ -35,6 +36,13 @@ struct SettingsView: View {
                     Task { await authSession.logout() }
                 }
             }
+            Section {
+                Toggle("Trimite pozele către profesor", isOn: $uploadImagesEnabled)
+            } header: {
+                Text("Confidențialitate")
+            } footer: {
+                Text("Implicit, pozele tale rămân doar pe acest dispozitiv — pleacă doar numele proiectului și cât de bine a învățat modelul. Activează asta doar dacă vrei ca profesorul să vadă și pozele tale.")
+            }
             Section("Sincronizare") {
                 HStack {
                     Text("Ultima sincronizare")
@@ -63,8 +71,8 @@ struct SettingsView: View {
                 .disabled(mlSync.isSyncing || !authSession.isAuthenticated)
             }
             Section("Legal") {
-                Link("Politică de confidențialitate", destination: URL(string: "https://trainbot.perpetuummobile.tech/privacy")!)
-                Link("Termeni și Condiții", destination: URL(string: "https://trainbot.perpetuummobile.tech/terms")!)
+                Link("Politică de confidențialitate", destination: URL(string: "https://trainbot.moldluca.tech/privacy")!)
+                Link("Termeni și Condiții", destination: URL(string: "https://trainbot.moldluca.tech/terms")!)
             }
             Section("Despre") {
                 Text("TrainBot v1.0.0 (Faza 1B)")

@@ -45,6 +45,11 @@ final class MLSyncService {
         defer { isSyncing = false }
 
         do {
+            // Pozele copiilor pleacă de pe dispozitiv DOAR cu consimțământ explicit
+            // (opt-in din Setări, default OFF). Fără el sincronizăm doar metadata
+            // (nume proiect/etichete + status antrenare) — ca aplicația Android.
+            let uploadImages = UserDefaults.standard.bool(forKey: "uploadImagesEnabled")
+
             let projects = try fetchAllProjects()
             var syncedProjects = 0
             var uploaded = 0
@@ -54,6 +59,7 @@ final class MLSyncService {
                     continue
                 }
                 syncedProjects += 1
+                guard uploadImages else { continue }
                 let labelMap = Dictionary(uniqueKeysWithValues: response.labels.map { ($0.clientId, $0.id) })
                 uploaded += try await uploadPendingImages(for: project, projectServerId: response.id, labelClientToServer: labelMap, token: token)
             }
