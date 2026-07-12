@@ -8,7 +8,9 @@ struct TrainedClassifier {
     let visionModel: VNCoreMLModel
     let labels: [String]
     let accuracy: Double
-    let modelData: Data
+    /// URL către modelul COMPILAT (.mlmodelc, un director) de la care se persistă
+    /// pe disc. nil când clasificatorul a fost încărcat de pe disc.
+    let compiledModelURL: URL?
 
     struct Prediction {
         let label: String

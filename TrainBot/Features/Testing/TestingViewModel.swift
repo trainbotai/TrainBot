@@ -30,29 +30,36 @@ final class TestingViewModel: ObservableObject {
         selectedProject = project
         prediction = nil
         testImage = nil
-        loadLatestModel(for: project)
+        Task { await loadLatestModel(for: project) }
     }
 
-    private func loadLatestModel(for project: MLProjectEntity) {
+    private func loadLatestModel(for project: MLProjectEntity) async {
         guard let models = project.models?.allObjects as? [MLModelEntity],
               let latest = models.sorted(by: { $0.version > $1.version }).first,
               let filename = latest.filename else { return }
 
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let modelURL = docs.appendingPathComponent("models/\(filename)")
+        let accuracy = latest.accuracy
         do {
-            let compiledURL = try MLModel.compileModel(at: modelURL)
-            let mlModel = try MLModel(contentsOf: compiledURL)
-            guard let visionModel = try? VNCoreMLModel(for: mlModel) else { throw NSError(domain: "TestingVM", code: 1) }
+            // Fișierul e deja un .mlmodelc compilat → încărcare directă, off-main,
+            // fără MLModel.compileModel (care bloca main thread-ul + eșua pe JSON).
+            let (mlModel, visionModel) = try await Task.detached(priority: .userInitiated) {
+                let mlModel = try MLModel(contentsOf: modelURL)
+                guard let visionModel = try? VNCoreMLModel(for: mlModel) else {
+                    throw NSError(domain: "TestingVM", code: 1)
+                }
+                return (mlModel, visionModel)
+            }.value
             loadedClassifier = TrainedClassifier(
                 model: mlModel,
                 visionModel: visionModel,
                 labels: [],
-                accuracy: latest.accuracy,
-                modelData: Data()
+                accuracy: accuracy,
+                compiledModelURL: nil
             )
         } catch {
-            self.error = "Nu pot incarca modelul: \(error.localizedDescription)"
+            self.error = "Nu pot încărca modelul: \(error.localizedDescription)"
         }
     }
 

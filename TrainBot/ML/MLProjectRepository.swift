@@ -106,8 +106,16 @@ final class MLProjectRepository {
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let modelsDir = docs.appendingPathComponent("models", isDirectory: true)
         try FileManager.default.createDirectory(at: modelsDir, withIntermediateDirectories: true)
-        let filename = "\(entity.id?.uuidString ?? UUID().uuidString).mlmodel"
-        try classifier.modelData.write(to: modelsDir.appendingPathComponent(filename))
+        // Persistăm modelul COMPILAT (.mlmodelc, un director) copiindu-l în
+        // Documents — se încarcă direct la testare, fără recompilare.
+        guard let compiledURL = classifier.compiledModelURL else {
+            throw NSError(domain: "MLProjectRepository", code: 1,
+                          userInfo: [NSLocalizedDescriptionKey: "Model fără URL compilat"])
+        }
+        let filename = "\(entity.id?.uuidString ?? UUID().uuidString).mlmodelc"
+        let dest = modelsDir.appendingPathComponent(filename)
+        try? FileManager.default.removeItem(at: dest)
+        try FileManager.default.copyItem(at: compiledURL, to: dest)
         entity.filename = filename
 
         project.updatedAt = Date()

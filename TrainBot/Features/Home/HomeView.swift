@@ -57,13 +57,14 @@ struct HomeView: View {
 
     private var cardsGrid: some View {
         VStack(spacing: 14) {
-            NavigationCard(title: "Antreneaza", subtitle: "Adauga poze si invata AI-ul", icon: "brain.head.profile") { path.append(.training) }
-            NavigationCard(title: "AI-ul tau", subtitle: "Antreneaza-ti botii si converseaza cu ei", icon: "bubble.left.and.bubble.right.fill") { path.append(.botList) }
+            NavigationCard(title: "Antrenează", subtitle: "Adaugă poze și învață AI-ul", icon: "brain.head.profile") { path.append(.training) }
+            NavigationCard(title: "AI-ul tău", subtitle: "Antrenează-ți boții și conversează cu ei", icon: "bubble.left.and.bubble.right.fill") { path.append(.botList) }
             NavigationCard(title: "Boții profesorului", subtitle: "Vorbește cu boții AI făcuți de profesorul tău", icon: "person.2.wave.2.fill") { path.append(.teacherBots) }
-            NavigationCard(title: "Testeaza", subtitle: "Vezi cat de bine recunoaste", icon: "viewfinder") { path.append(.testing) }
+            NavigationCard(title: "Testează", subtitle: "Vezi cât de bine recunoaște", icon: "viewfinder") { path.append(.testing) }
             NavigationCard(title: "Lecții AI", subtitle: "Învață cum funcționează AI-ul, pas cu pas", icon: "books.vertical.fill") { path.append(.lessonsLibrary) }
-            NavigationCard(title: "Cunostinte", subtitle: "Toate pozele invatate", icon: "books.vertical") { path.append(.knowledge) }
-            NavigationCard(title: "Provocarea zilei", subtitle: "Castiga XP rezolvand task-ul", icon: "star.circle") { path.append(.dailyChallenge) }
+            NavigationCard(title: "Realizări", subtitle: "Insignele tale și XP-ul câștigat", icon: "trophy.fill") { path.append(.achievements) }
+            NavigationCard(title: "Cunoștințe", subtitle: "Toate pozele învățate", icon: "books.vertical") { path.append(.knowledge) }
+            NavigationCard(title: "Provocarea zilei", subtitle: "Câștigă XP rezolvând task-ul", icon: "star.circle") { path.append(.dailyChallenge) }
         }
     }
 

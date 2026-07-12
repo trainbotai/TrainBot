@@ -19,15 +19,24 @@ final class ImageStorage {
         return ImageStorage(rootDirectory: imgDir)
     }()
 
+    /// Latura maximă la stocare. O poză de 12MP ținută full-res în RAM ≈ 48MB →
+    /// jetsam kill pe device-urile cu 3-4GB (exact publicul țintă). Modelul lucrează
+    /// oricum la 224px; 1024px păstrează calitatea pentru afișare.
+    private static let maxDimension: CGFloat = 1024
+
     func save(image: UIImage) throws -> String {
         let filename = "\(UUID().uuidString).jpg"
         let url = rootDirectory.appendingPathComponent(filename)
 
-        // Render at scale=1 so pixel size == point size, making decoded image.size match original
+        // Downscale la maxDimension păstrând proporțiile (fără upscaling).
+        let longest = max(image.size.width, image.size.height)
+        let scale = longest > Self.maxDimension ? Self.maxDimension / longest : 1
+        let targetSize = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+
         let format = UIGraphicsImageRendererFormat()
         format.scale = 1
-        let normalized = UIGraphicsImageRenderer(size: image.size, format: format).image { _ in
-            image.draw(in: CGRect(origin: .zero, size: image.size))
+        let normalized = UIGraphicsImageRenderer(size: targetSize, format: format).image { _ in
+            image.draw(in: CGRect(origin: .zero, size: targetSize))
         }
         guard let data = normalized.jpegData(compressionQuality: 0.85) else {
             throw ImageStorageError.encodingFailed
