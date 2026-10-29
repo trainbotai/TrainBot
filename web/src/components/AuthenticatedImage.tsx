@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useAuthStore } from '../auth/authStore'
-
-const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api/v1'
+import { apiFetchBlob } from '../lib/api'
 
 /**
  * Renders <img> for a backend-served image that requires Bearer auth.
@@ -22,13 +21,9 @@ export default function AuthenticatedImage({
 
   const { data: blob, isLoading, error } = useQuery({
     queryKey: ['image-blob', imageId],
-    queryFn: async () => {
-      const res = await fetch(`${BASE_URL}/ml/images/${imageId}`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      })
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      return res.blob()
-    },
+    queryFn: () =>
+      // token-ul curent din store (nu din closure) ca să prindă și refresh-ul
+      apiFetchBlob(`/ml/images/${imageId}`, useAuthStore.getState().accessToken ?? undefined),
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
     enabled: !!accessToken,
