@@ -33,7 +33,7 @@ const envSchema = z.object({
   GROQ_API_KEY: z.string().min(1),
   OPENAI_API_KEY: z.string().min(1),  // for Moderation API only (free)
   LLM_PROVIDER: z.enum(['groq', 'anthropic']).default('groq'),
-  LLM_MODEL: z.string().default('llama-3.3-70b-versatile'),
+  LLM_MODEL: z.string().default('openai/gpt-oss-120b'),
   LLM_MAX_QUERIES_PER_DAY: z.coerce.number().int().positive().default(50),
   LLM_MAX_EXAMPLES_PER_VERSION: z.coerce.number().int().positive().max(20).default(10),
   LLM_MAX_EXAMPLE_LENGTH: z.coerce.number().int().positive().default(500),
