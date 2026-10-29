@@ -33,6 +33,7 @@ services:
     restart: unless-stopped
     ports:
       - "33443:33443"
+      - "33096:33096"
     environment:
       CF_API_TOKEN: ${CF_API_TOKEN}
     volumes:
@@ -42,6 +43,18 @@ services:
       - caddy_config:/config
     depends_on:
       - backend
+    networks: [trainbot]
+
+  # Tunel Cloudflare: trainbot-api.moldluca.tech / trainbot-app.moldluca.tech pe 443
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate --protocol http2 run
+    environment:
+      TUNNEL_TOKEN: ${TRAINBOT_TUNNEL_TOKEN}
+    depends_on:
+      - backend
+      - caddy
     networks: [trainbot]
 
 networks:

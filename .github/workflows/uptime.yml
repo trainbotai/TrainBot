@@ -22,3 +22,14 @@ jobs:
         run: |
           curl -fsS -m 20 --retry 2 --retry-delay 10 -o /dev/null -w '%{http_code}\n' \
             https://app.trainbot.moldluca.tech:33443/ | grep -q '^200$'
+
+      - name: API health (443, tunel Cloudflare)
+        run: |
+          curl -fsS -m 20 --retry 2 --retry-delay 10 \
+            https://trainbot-api.moldluca.tech/health \
+            | tee /dev/stderr | grep -q '"status":"ok"'
+
+      - name: Dashboard profesor (443, tunel Cloudflare)
+        run: |
+          curl -fsS -m 20 --retry 2 --retry-delay 10 -o /dev/null -w '%{http_code}\n' \
+            https://trainbot-app.moldluca.tech/ | grep -q '^200$'
