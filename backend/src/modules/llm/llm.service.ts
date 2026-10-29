@@ -6,6 +6,7 @@ import {
 } from '../../lib/errors.js';
 import { env } from '../../config/index.js';
 import type { Example, SessionSummary, SessionDetail, ChatHistoryItem } from './llm.types.js';
+import { assertSafeForStorage } from './safety/assertSafe.js';
 import { runLLMQuery } from './llm.queryRunner.js';
 
 function validateExamples(examples: Example[]): void {
@@ -28,6 +29,15 @@ function validateExamples(examples: Example[]): void {
   }
 }
 
+async function assertExamplesSafe(examples: Example[]): Promise<void> {
+  await assertSafeForStorage(
+    examples.flatMap((ex) => [
+      { text: ex.user, direction: 'input' as const },
+      { text: ex.ai, direction: 'output' as const },
+    ]),
+  );
+}
+
 export async function createSession(opts: {
   studentId: string;
   tenantId: string;
@@ -36,6 +46,7 @@ export async function createSession(opts: {
   examples: Example[];
 }): Promise<SessionDetail> {
   validateExamples(opts.examples);
+  await assertExamplesSafe(opts.examples);
 
   if (opts.assignmentId) {
     const student = await db.student.findUnique({ where: { id: opts.studentId } });
@@ -163,6 +174,7 @@ export async function addVersion(
   examples: Example[],
 ): Promise<SessionDetail> {
   validateExamples(examples);
+  await assertExamplesSafe(examples);
 
   const session = await db.lLMSession.findFirst({
     where: { id: sessionId, studentId, deletedAt: null },

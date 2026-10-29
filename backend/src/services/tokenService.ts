@@ -39,6 +39,17 @@ export function verifyAccessToken(token: string): AccessTokenPayload {
   return decoded as AccessTokenPayload;
 }
 
+// Doar pentru rate limiting: semnătura dovedește identitatea, expirarea nu contează —
+// un elev cu token expirat (înainte de refresh) rămâne în bucket-ul lui, nu în cel comun al IP-ului.
+export function verifyAccessTokenIgnoringExpiry(token: string): AccessTokenPayload {
+  const decoded = jwt.verify(token, env.JWT_ACCESS_SECRET, {
+    issuer: 'trainbot',
+    audience: 'trainbot-clients',
+    ignoreExpiration: true,
+  });
+  return decoded as AccessTokenPayload;
+}
+
 export function verifyRefreshToken(token: string): RefreshTokenPayload {
   const decoded = jwt.verify(token, env.JWT_REFRESH_SECRET, {
     issuer: 'trainbot',

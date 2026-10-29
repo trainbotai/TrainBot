@@ -16,9 +16,9 @@ async function ask(rl: readline.Interface, prompt: string, hidden = false): Prom
         process.stdin.pause();
         process.stdout.write('\n');
         resolve(buffer);
-      } else if (ch === '') {
+      } else if (ch === '\u0003') {
         process.exit(0);
-      } else if (ch === '') {
+      } else if (ch === '\u007f' || ch === '\b') {
         buffer = buffer.slice(0, -1);
       } else {
         buffer += ch;

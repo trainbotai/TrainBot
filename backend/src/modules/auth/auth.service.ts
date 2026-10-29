@@ -188,10 +188,14 @@ export async function refreshTokens(body: RefreshBody): Promise<AuthResult> {
   }
 
   // Revoke old token, issue new pair (rotation)
-  await db.refreshToken.update({
-    where: { id: record.id },
+  // Atomic: doar primul refresh paralel găsește revokedAt null și câștigă.
+  const revoked = await db.refreshToken.updateMany({
+    where: { id: record.id, revokedAt: null },
     data: { revokedAt: new Date() },
   });
+  if (revoked.count !== 1) {
+    throw new UnauthorizedError('Refresh token revoked or expired');
+  }
 
   if (record.teacherId) {
     const teacher = await db.teacher.findUnique({ where: { id: record.teacherId } });

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
-import { apiFetch, ApiError } from './api'
+import { apiFetch, apiFetchBlob, ApiError } from './api'
 
 const { mockRefresh, mockLogout, mockGetState } = vi.hoisted(() => {
   const mockRefresh = vi.fn()
@@ -95,5 +95,27 @@ describe('apiFetch', () => {
 
     await expect(apiFetch('/auth/teacher/login', { method: 'POST' })).rejects.toThrow(ApiError)
     expect(mockRefresh).not.toHaveBeenCalled()
+  })
+})
+
+describe('apiFetchBlob', () => {
+  beforeEach(() => {
+    vi.stubGlobal('fetch', vi.fn())
+    mockRefresh.mockReset().mockResolvedValue(undefined)
+  })
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  it('refreshes on 401 and retries with the new token', async () => {
+    const blob = new Blob(['img'])
+    const f = fetch as unknown as ReturnType<typeof vi.fn>
+    f.mockResolvedValueOnce({ ok: false, status: 401, json: async () => ({}) })
+    f.mockResolvedValueOnce({ ok: true, status: 200, blob: async () => blob })
+    const out = await apiFetchBlob('/ml/images/1', 'tok-vechi')
+    expect(out).toBe(blob)
+    expect(mockRefresh).toHaveBeenCalledTimes(1)
+    expect(f).toHaveBeenCalledTimes(2)
+    expect(f.mock.calls[1][1].headers.Authorization).toBe('Bearer tok-nou')
   })
 })

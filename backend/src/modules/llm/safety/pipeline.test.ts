@@ -48,3 +48,14 @@ describe('checkSafety', () => {
     expect(vi.mocked(checkModeration)).toHaveBeenCalledWith('text', 'output');
   });
 });
+
+describe('checkSafety — moderation unavailable', () => {
+  it('fails closed with reason "unavailable" (not "moderation")', async () => {
+    vi.mocked(checkKeywords).mockReturnValueOnce({ safe: true, matched: [] });
+    vi.mocked(checkModeration).mockResolvedValueOnce({ safe: false, error: true });
+    const result = await checkSafety('text', 'input');
+    expect(result.safe).toBe(false);
+    expect(result.reason).toBe('unavailable');
+    expect(result.categories).toBeUndefined();
+  });
+});

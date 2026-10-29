@@ -1,24 +1,23 @@
 import rateLimit from 'express-rate-limit';
 import type { Request } from 'express';
 import { env } from '../config/index.js';
+import { verifyAccessTokenIgnoringExpiry } from '../services/tokenService.js';
 
 const skipInTests = () => env.NODE_ENV === 'test';
 
 // O clasă întreagă (30 elevi) stă în spatele NAT-ului școlii = un singur IP.
 // Limitele per-IP blochează sistematic clasa, deci cheia e utilizatorul:
-// `sub` din payload-ul JWT (decodat FĂRĂ verificare — suficient pentru bucketing;
-// token-urile forjate pică oricum cu 401, iar fallback-ul rămâne per-IP).
-function userOrIpKey(req: Request): string {
+// `sub` din access token-ul cu semnătura VERIFICATĂ (expirarea ignorată: un token expirat
+// e tot al elevului). Token lipsă/forjat → per-IP, altfel s-ar putea ocoli limita
+// sau epuiza bucket-ul altcuiva.
+export function userOrIpKey(req: Request): string {
   const auth = req.headers.authorization;
   if (auth?.startsWith('Bearer ')) {
     try {
-      const payloadB64 = auth.slice(7).split('.')[1] ?? '';
-      const payload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString()) as {
-        sub?: string;
-      };
+      const payload = verifyAccessTokenIgnoringExpiry(auth.slice(7));
       if (payload.sub) return `u:${payload.sub}`;
     } catch {
-      // token malformat → fallback IP
+      // token forjat/malformat → fallback IP
     }
   }
   return `ip:${req.ip ?? ''}`;
@@ -29,7 +28,9 @@ export const generalLimiter = rateLimit({
   max: env.RATE_LIMIT_MAX,
   standardHeaders: true,
   legacyHeaders: false,
-  skip: skipInTests,
+  // /auth are limitele lui (authLimiter, refreshLimiter); aici ar cădea per-IP și 30 de
+  // login-uri dintr-un NAT de școală ar umple singure bucket-ul comun.
+  skip: (req: Request) => skipInTests() || req.originalUrl.startsWith('/api/v1/auth/'),
   keyGenerator: userOrIpKey,
   message: {
     type: 'https://trainbot.ro/errors/too_many_requests',
@@ -55,6 +56,23 @@ export const authLimiter = rateLimit({
   message: {
     type: 'https://trainbot.ro/errors/too_many_requests',
     title: 'Too many login attempts',
+    status: 429,
+    detail: 'Try again in a few minutes.',
+  },
+});
+
+// Refresh/logout nu poartă username/email; cheia e IP-ul, deci plafonul e mai generos
+// (clasa dintr-un NAT reîmprospătează token-urile aproape simultan).
+export const refreshLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: skipInTests,
+  keyGenerator: (req: Request) => `refresh:${req.ip ?? ''}`,
+  message: {
+    type: 'https://trainbot.ro/errors/too_many_requests',
+    title: 'Too many requests',
     status: 429,
     detail: 'Try again in a few minutes.',
   },

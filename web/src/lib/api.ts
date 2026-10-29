@@ -1,6 +1,5 @@
 import type { ProblemDetail } from './types'
-
-const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api/v1'
+import { BASE_URL } from './config'
 
 export class ApiError extends Error {
   constructor(public status: number, message: string, public problem?: ProblemDetail) {
@@ -32,12 +31,13 @@ async function tryRefresh(): Promise<boolean> {
   return refreshPromise
 }
 
-export async function apiFetch<T>(
+// Cerere cu Bearer + 401 → refresh → un singur retry. Întoarce Response-ul ok.
+async function request(
   path: string,
-  options: RequestInit = {},
+  options: RequestInit,
   accessToken?: string,
   _retried = false,
-): Promise<T> {
+): Promise<Response> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...(options.headers as Record<string, string> | undefined),
@@ -53,7 +53,7 @@ export async function apiFetch<T>(
       if (refreshed) {
         const { useAuthStore } = await import('../auth/authStore')
         const newToken = useAuthStore.getState().accessToken ?? undefined
-        return apiFetch<T>(path, options, newToken, true)
+        return request(path, options, newToken, true)
       }
     }
     let problem: ProblemDetail | undefined
@@ -61,7 +61,19 @@ export async function apiFetch<T>(
     const message = problem?.detail ?? problem?.title ?? `HTTP ${res.status}`
     throw new ApiError(res.status, message, problem)
   }
+  return res
+}
 
+export async function apiFetch<T>(
+  path: string,
+  options: RequestInit = {},
+  accessToken?: string,
+): Promise<T> {
+  const res = await request(path, options, accessToken)
   if (res.status === 204) return undefined as T
   return (await res.json()) as T
+}
+
+export async function apiFetchBlob(path: string, accessToken?: string): Promise<Blob> {
+  return (await request(path, {}, accessToken)).blob()
 }

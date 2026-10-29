@@ -95,6 +95,18 @@ export class LLMContentBlockedOutputError extends AppError {
   }
 }
 
+export class LLMModerationUnavailableError extends AppError {
+  constructor() {
+    super(
+      503,
+      'llm/moderation_unavailable',
+      'Moderation unavailable',
+      'Verificarea de siguranță nu e disponibilă acum. Încearcă peste un minut.',
+    );
+    this.name = 'LLMModerationUnavailableError';
+  }
+}
+
 export class LLMSessionNotFoundError extends AppError {
   constructor() {
     super(404, 'llm/session_not_found', 'Session not found', 'Botul nu a fost găsit.');

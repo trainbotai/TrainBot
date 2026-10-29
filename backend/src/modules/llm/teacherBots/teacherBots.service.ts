@@ -1,5 +1,6 @@
 import { db } from '../../../lib/db.js';
-import { ForbiddenError, NotFoundError, LLMTeacherBotNotFoundError } from '../../../lib/errors.js';
+import { ForbiddenError, LLMTeacherBotNotFoundError } from '../../../lib/errors.js';
+import { assertSafeForStorage, type SafetyItem } from '../safety/assertSafe.js';
 import { runLLMQuery, type RunQueryResult } from '../llm.queryRunner.js';
 import type { Example } from '../llm.types.js';
 
@@ -41,6 +42,18 @@ function rowToDetail(row: {
   };
 }
 
+async function assertBotContentSafe(opts: {
+  instruction?: string;
+  examples?: BotExample[];
+}): Promise<void> {
+  const items: SafetyItem[] = [];
+  if (opts.instruction !== undefined) items.push({ text: opts.instruction, direction: 'input' });
+  for (const ex of opts.examples ?? []) {
+    items.push({ text: ex.input, direction: 'input' }, { text: ex.output, direction: 'output' });
+  }
+  await assertSafeForStorage(items);
+}
+
 export async function createBot(opts: {
   teacherId: string;
   tenantId: string;
@@ -55,6 +68,8 @@ export async function createBot(opts: {
     });
     if (!cls) throw new ForbiddenError('Class does not belong to you');
   }
+
+  await assertBotContentSafe(opts);
 
   const bot = await db.lLMTeacherBot.create({
     data: {
@@ -113,6 +128,8 @@ export async function updateBot(opts: {
     });
     if (!cls) throw new ForbiddenError('Class does not belong to you');
   }
+
+  await assertBotContentSafe(opts);
 
   const updated = await db.lLMTeacherBot.update({
     where: { id: opts.botId },

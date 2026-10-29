@@ -1,4 +1,5 @@
 import SwiftUI
+import CoreData
 
 struct DailyChallengeView: View {
     @Environment(\.managedObjectContext) private var ctx

@@ -34,6 +34,14 @@ beforeEach(() => {
   mockCreate.mockReset();
 });
 
+describe('OpenAI client config', () => {
+  it('sets timeout and bounded retries', () => {
+    expect(openaiModule.default).toHaveBeenCalledWith(
+      expect.objectContaining({ timeout: 5000, maxRetries: 2 }),
+    );
+  });
+});
+
 describe('checkModeration', () => {
   it('passes safe content with low scores', async () => {
     mockCreate.mockResolvedValueOnce({

@@ -5,7 +5,7 @@ import compression from 'compression';
 import { env } from './config/index.js';
 import { db } from './lib/db.js';
 import { errorHandler } from './middleware/errorHandler.js';
-import { generalLimiter, authLimiter, pilotLimiter } from './middleware/rateLimit.js';
+import { generalLimiter, authLimiter, refreshLimiter, pilotLimiter } from './middleware/rateLimit.js';
 import { authRouter } from './modules/auth/auth.routes.js';
 import { classesRouter } from './modules/classes/classes.routes.js';
 import { classStudentsRouter, studentsRouter } from './modules/students/students.routes.js';
@@ -47,7 +47,12 @@ export function createApp(): Application {
 
   app.use('/api/', generalLimiter);
 
-  app.use('/api/v1/auth', authLimiter, authRouter);
+  app.use(
+    ['/api/v1/auth/teacher/login', '/api/v1/auth/student/login', '/api/v1/auth/teacher/signup'],
+    authLimiter,
+  );
+  app.use(['/api/v1/auth/refresh', '/api/v1/auth/logout'], refreshLimiter);
+  app.use('/api/v1/auth', authRouter);
   app.use('/api/v1/teacher/classes', classesRouter);
   app.use('/api/v1/teacher/classes/:classId/students', classStudentsRouter);
   app.use('/api/v1/teacher/students', studentsRouter);

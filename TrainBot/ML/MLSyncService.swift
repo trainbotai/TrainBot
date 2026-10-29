@@ -34,7 +34,7 @@ final class MLSyncService {
     }
 
     func syncAll() async {
-        guard let token = authSession.accessToken, authSession.currentUser?.role == "student" else {
+        guard authSession.accessToken != nil, authSession.currentUser?.role == "student" else {
             lastError = "Trebuie să fii conectat ca elev pentru a sincroniza."
             return
         }
@@ -55,13 +55,13 @@ final class MLSyncService {
             var uploaded = 0
             for project in projects {
                 let payload = build(from: project)
-                guard let response: SyncedProjectResponse = try? await pushProject(payload, token: token) else {
+                guard let response: SyncedProjectResponse = try? await pushProject(payload) else {
                     continue
                 }
                 syncedProjects += 1
                 guard uploadImages else { continue }
                 let labelMap = Dictionary(uniqueKeysWithValues: response.labels.map { ($0.clientId, $0.id) })
-                uploaded += try await uploadPendingImages(for: project, projectServerId: response.id, labelClientToServer: labelMap, token: token)
+                uploaded += try await uploadPendingImages(for: project, projectServerId: response.id, labelClientToServer: labelMap)
             }
             syncedCount = syncedProjects
             uploadedImageCount = uploaded
@@ -71,9 +71,9 @@ final class MLSyncService {
         }
     }
 
-    private func pushProject(_ payload: MLProjectSyncPayload, token: String) async throws -> SyncedProjectResponse {
+    private func pushProject(_ payload: MLProjectSyncPayload) async throws -> SyncedProjectResponse {
         let endpoint = APIEndpoint.syncMLProject(payload)
-        return try await APIClient.shared.request(endpoint, bearerToken: token)
+        return try await authSession.request(endpoint)
     }
 
     private func fetchAllProjects() throws -> [MLProjectEntity] {
@@ -111,8 +111,7 @@ final class MLSyncService {
     private func uploadPendingImages(
         for project: MLProjectEntity,
         projectServerId: String,
-        labelClientToServer: [String: String],
-        token: String
+        labelClientToServer: [String: String]
     ) async throws -> Int {
         var uploaded = 0
         let labels = (project.labels?.allObjects as? [MLLabelEntity] ?? [])
@@ -130,13 +129,15 @@ final class MLSyncService {
                     continue // missing local file — skip
                 }
                 do {
-                    let resp = try await MultipartUploader.uploadImage(
-                        projectServerId: projectServerId,
-                        labelServerId: labelServerId,
-                        clientId: imageId.uuidString,
-                        jpegData: jpegData,
-                        bearerToken: token
-                    )
+                    let resp = try await authSession.withAuth { token in
+                        try await MultipartUploader.uploadImage(
+                            projectServerId: projectServerId,
+                            labelServerId: labelServerId,
+                            clientId: imageId.uuidString,
+                            jpegData: jpegData,
+                            bearerToken: token
+                        )
+                    }
                     image.serverImageId = resp.id
                     try? context.save()
                     uploaded += 1

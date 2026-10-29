@@ -2,8 +2,11 @@ import Foundation
 
 final class APIClient {
     static let shared = APIClient()
-    private init() {}
-    private let session = URLSession.shared
+    private let session: URLSession
+
+    init(session: URLSession = .shared) {
+        self.session = session
+    }
 
     func request<T: Decodable>(_ endpoint: APIEndpoint, bearerToken: String? = nil) async throws -> T {
         var req: URLRequest
