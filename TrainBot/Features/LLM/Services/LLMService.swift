@@ -10,20 +10,16 @@ final class LLMService {
         self.authSession = authSession
     }
 
-    private var token: String? { authSession.accessToken }
-
     func listSessions() async throws -> [SessionSummary] {
-        let res: SessionListResponse = try await APIClient.shared.request(
-            APIEndpoint.listLLMSessions(),
-            bearerToken: token
+        let res: SessionListResponse = try await authSession.request(
+            APIEndpoint.listLLMSessions()
         )
         return res.sessions
     }
 
     func getSession(id: String) async throws -> SessionDetail {
-        try await APIClient.shared.request(
-            APIEndpoint.getLLMSession(id: id),
-            bearerToken: token
+        try await authSession.request(
+            APIEndpoint.getLLMSession(id: id)
         )
     }
 
@@ -33,9 +29,8 @@ final class LLMService {
             examples: examples.map { .init(user: $0.user, ai: $0.ai) },
             assignmentId: assignmentId
         )
-        return try await APIClient.shared.request(
-            APIEndpoint.createLLMSession(body),
-            bearerToken: token
+        return try await authSession.request(
+            APIEndpoint.createLLMSession(body)
         )
     }
 
@@ -43,23 +38,20 @@ final class LLMService {
         let body = APIEndpoint.AddVersionBody(
             examples: examples.map { .init(user: $0.user, ai: $0.ai) }
         )
-        return try await APIClient.shared.request(
-            APIEndpoint.addLLMVersion(sessionId: sessionId, body),
-            bearerToken: token
+        return try await authSession.request(
+            APIEndpoint.addLLMVersion(sessionId: sessionId, body)
         )
     }
 
     func deleteSession(id: String) async throws {
-        let _: EmptyResponse = try await APIClient.shared.request(
-            APIEndpoint.deleteLLMSession(id: id),
-            bearerToken: token
+        let _: EmptyResponse = try await authSession.request(
+            APIEndpoint.deleteLLMSession(id: id)
         )
     }
 
     func listQueries(sessionId: String, version: Int? = nil) async throws -> [ChatHistoryItem] {
-        let res: ChatHistoryResponse = try await APIClient.shared.request(
-            APIEndpoint.listLLMQueries(sessionId: sessionId, version: version),
-            bearerToken: token
+        let res: ChatHistoryResponse = try await authSession.request(
+            APIEndpoint.listLLMQueries(sessionId: sessionId, version: version)
         )
         return res.queries
     }
@@ -67,17 +59,15 @@ final class LLMService {
     struct ReportResponse: Decodable { let reportId: String }
 
     func reportSession(sessionId: String, reason: String?) async throws -> String {
-        let res: ReportResponse = try await APIClient.shared.request(
-            APIEndpoint.reportLLMSession(sessionId: sessionId, reason: reason),
-            bearerToken: token
+        let res: ReportResponse = try await authSession.request(
+            APIEndpoint.reportLLMSession(sessionId: sessionId, reason: reason)
         )
         return res.reportId
     }
 
     func getQuota() async throws -> QueryQuota {
-        try await APIClient.shared.request(
-            APIEndpoint.llmQuota(),
-            bearerToken: token
+        try await authSession.request(
+            APIEndpoint.llmQuota()
         )
     }
 }

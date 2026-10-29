@@ -1,4 +1,5 @@
 import SwiftUI
+import CoreData
 
 struct AchievementsView: View {
     @Environment(\.managedObjectContext) private var ctx

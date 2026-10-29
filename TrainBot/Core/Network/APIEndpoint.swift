@@ -15,7 +15,9 @@ struct APIEndpoint {
     #if DEBUG
     static let baseURL = "http://localhost:3000/api/v1"
     #else
-    static let baseURL = "https://api.trainbot.moldluca.tech:33443/api/v1"
+    // Port 443 prin tunelul Cloudflare — rețelele școlilor blochează des porturile nestandard.
+    // Vechiul https://api.trainbot.moldluca.tech:33443 rămâne activ pentru build-urile existente.
+    static let baseURL = "https://trainbot-api.moldluca.tech/api/v1"
     #endif
 
     func urlRequest() throws -> URLRequest {

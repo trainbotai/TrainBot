@@ -19,9 +19,8 @@ final class TeacherBotsViewModel {
         errorMessage = nil
         defer { isLoading = false }
         do {
-            let res: TeacherBotListResponse = try await APIClient.shared.request(
-                APIEndpoint.listTeacherBots(),
-                bearerToken: authSession.accessToken
+            let res: TeacherBotListResponse = try await authSession.request(
+                APIEndpoint.listTeacherBots()
             )
             bots = res.bots
         } catch let error as APIError {

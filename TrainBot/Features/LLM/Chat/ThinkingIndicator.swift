@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 
 struct ThinkingIndicator: View {
     @State private var dotCount = 0
