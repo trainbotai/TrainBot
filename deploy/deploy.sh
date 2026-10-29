@@ -24,7 +24,10 @@ echo "=== Step 3: Rebuild backend + start ==="
 $SSH "cd $REMOTE_BASE && docker compose up -d --build backend 2>&1 | tail -20"
 
 echo "=== Step 4: Prisma migrate ==="
-$SSH "cd $REMOTE_BASE && docker compose exec -T backend sh -c 'cd /app && npx prisma migrate deploy'"
+# Imaginea de producție nu are CLI-ul prisma: fără versiune fixă npx ar aduce ultima majoră.
+# Root: user-ul aplicației nu poate scrie motoarele prisma în node_modules.
+PRISMA_V=$(node -p "require('$REPO/backend/package-lock.json').packages['node_modules/prisma'].version")
+$SSH "cd $REMOTE_BASE && docker compose exec -T -u root backend sh -c 'cd /app && npx -y prisma@$PRISMA_V migrate deploy'"
 
 echo "=== Step 5: Health check ==="
 $SSH "for i in \$(seq 1 10); do curl -sf http://localhost:3000/health && exit 0; sleep 3; done; exit 1"
