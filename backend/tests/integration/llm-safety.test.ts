@@ -29,6 +29,9 @@ const app = createApp();
 beforeEach(async () => {
   mockChat.mockReset();
   mockModeration.mockReset();
+  // Exemplele sesiunii trec acum prin moderare la salvare; implicit „sigur",
+  // testele care vor un rezultat anume îl suprascriu.
+  mockModeration.mockResolvedValue({ safe: true });
 
   await db.lLMReport.deleteMany();
   await db.lLMQuery.deleteMany();
