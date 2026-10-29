@@ -8,6 +8,7 @@ import {
   LLMContentBlockedInputError,
   LLMContentBlockedOutputError,
   LLMProviderUnavailableError,
+  LLMModerationUnavailableError,
 } from '../../lib/errors.js';
 import { env } from '../../config/index.js';
 import { logger } from '../../lib/logger.js';
@@ -33,38 +34,73 @@ export interface RunQueryResult {
   outputTokens: number;
 }
 
-async function checkQuota(studentId: string): Promise<void> {
+/**
+ * Rezervă o intrare de quota ÎNAINTE de apelul Groq. Count + insert rulează într-o
+ * tranzacție sub un advisory lock per elev, deci cereri paralele nu mai pot depăși limita.
+ * Rândul rezervat e completat la final (update) sau șters dacă cererea eșuează fără efect.
+ */
+async function reserveQuota(
+  opts: RunQueryOpts,
+  ids: { sessionId?: string; versionId?: string; botId?: string },
+): Promise<string> {
   const todayStart = new Date();
   todayStart.setUTCHours(0, 0, 0, 0);
 
-  const used = await db.lLMQuery.count({
-    where: { studentId, createdAt: { gte: todayStart } },
+  return db.$transaction(async (tx) => {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${opts.studentId}))`;
+    const used = await tx.lLMQuery.count({
+      where: { studentId: opts.studentId, createdAt: { gte: todayStart } },
+    });
+    if (used >= env.LLM_MAX_QUERIES_PER_DAY) {
+      throw new LLMQuotaExceededError(env.LLM_MAX_QUERIES_PER_DAY);
+    }
+    const row = await tx.lLMQuery.create({
+      data: { ...ids, studentId: opts.studentId, userPrompt: opts.userPrompt, aiResponse: '' },
+    });
+    return row.id;
   });
+}
 
-  if (used >= env.LLM_MAX_QUERIES_PER_DAY) {
-    throw new LLMQuotaExceededError(env.LLM_MAX_QUERIES_PER_DAY);
+async function releaseQuota(id: string): Promise<void> {
+  try {
+    await db.lLMQuery.delete({ where: { id } });
+  } catch (err) {
+    logger.error({ err, queryId: id }, 'Failed to release reserved LLM quota row');
   }
 }
 
 export async function runLLMQuery(opts: RunQueryOpts): Promise<RunQueryResult> {
-  await checkQuota(opts.studentId);
-
   const ctx = opts.auditContext;
-  const sessionId = ctx.type === 'session' ? ctx.sessionId : undefined;
-  const versionId = ctx.type === 'session' ? ctx.versionId : undefined;
-  const botId = ctx.type === 'bot' ? ctx.botId : undefined;
+  const ids = {
+    sessionId: ctx.type === 'session' ? ctx.sessionId : undefined,
+    versionId: ctx.type === 'session' ? ctx.versionId : undefined,
+    botId: ctx.type === 'bot' ? ctx.botId : undefined,
+  };
 
+  const queryId = await reserveQuota(opts, ids);
+  try {
+    return await runReserved(opts, queryId);
+  } catch (err) {
+    // Blocările de conținut consumă quota (rândul e completat în runReserved);
+    // orice altă eroare (moderare/Groq indisponibile) eliberează rezervarea.
+    if (
+      !(err instanceof LLMContentBlockedInputError) &&
+      !(err instanceof LLMContentBlockedOutputError)
+    ) {
+      await releaseQuota(queryId);
+    }
+    throw err;
+  }
+}
+
+async function runReserved(opts: RunQueryOpts, queryId: string): Promise<RunQueryResult> {
   // Input safety
   const inputSafety = await checkSafety(opts.userPrompt, 'input');
+  if (inputSafety.reason === 'unavailable') throw new LLMModerationUnavailableError();
   if (!inputSafety.safe) {
-    await db.lLMQuery.create({
+    await db.lLMQuery.update({
+      where: { id: queryId },
       data: {
-        sessionId,
-        versionId,
-        botId,
-        studentId: opts.studentId,
-        userPrompt: opts.userPrompt,
-        aiResponse: '',
         inputModerationFlagged: true,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         moderationCategories: inputSafety.categories ? (inputSafety.categories as any) : null,
@@ -86,14 +122,11 @@ export async function runLLMQuery(opts: RunQueryOpts): Promise<RunQueryResult> {
 
   // Output safety
   const outputSafety = await checkSafety(chatResult.content, 'output');
+  if (outputSafety.reason === 'unavailable') throw new LLMModerationUnavailableError();
   if (!outputSafety.safe) {
-    await db.lLMQuery.create({
+    await db.lLMQuery.update({
+      where: { id: queryId },
       data: {
-        sessionId,
-        versionId,
-        botId,
-        studentId: opts.studentId,
-        userPrompt: opts.userPrompt,
         aiResponse: chatResult.content,
         outputModerationFlagged: true,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -106,13 +139,9 @@ export async function runLLMQuery(opts: RunQueryOpts): Promise<RunQueryResult> {
     throw new LLMContentBlockedOutputError();
   }
 
-  await db.lLMQuery.create({
+  await db.lLMQuery.update({
+    where: { id: queryId },
     data: {
-      sessionId,
-      versionId,
-      botId,
-      studentId: opts.studentId,
-      userPrompt: opts.userPrompt,
       aiResponse: chatResult.content,
       inputTokens: chatResult.inputTokens,
       outputTokens: chatResult.outputTokens,

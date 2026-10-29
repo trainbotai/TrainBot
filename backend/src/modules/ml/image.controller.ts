@@ -1,8 +1,12 @@
 import type { Request, Response, NextFunction } from 'express';
 import multer from 'multer';
+import { z } from 'zod';
 import * as svc from './image.service.js';
 import { env } from '../../config/index.js';
 import { UnauthorizedError, BadRequestError } from '../../lib/errors.js';
+
+// Același format ca la sync (ml.schemas): UUID generat pe iOS, max 64 caractere.
+const clientIdSchema = z.string().trim().min(1).max(64).regex(/^[A-Za-z0-9_-]+$/);
 
 // Multer in-memory storage — sharp pipeline reads buffer directly
 const upload = multer({
@@ -21,8 +25,11 @@ export async function uploadImage(req: Request, res: Response, next: NextFunctio
   try {
     const ctx = requireStudent(req);
     if (!req.file) throw new BadRequestError('image file required (field "image")');
-    const clientId = (req.body?.clientId as string | undefined)?.trim();
-    if (!clientId) throw new BadRequestError('clientId field required');
+    const parsedClientId = clientIdSchema.safeParse(req.body?.clientId);
+    if (!parsedClientId.success) {
+      throw new BadRequestError('clientId required (1-64 chars: letters, digits, "-", "_")');
+    }
+    const clientId = parsedClientId.data;
 
     const projectId = req.params['projectId'] as string;
     const labelId = req.params['labelId'] as string;

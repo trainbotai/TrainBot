@@ -2,7 +2,8 @@ import OpenAI from 'openai';
 import { env } from '../../../config/index.js';
 import { logger } from '../../../lib/logger.js';
 
-const client = new OpenAI({ apiKey: env.OPENAI_API_KEY });
+// Timeout + retry-uri limitate: moderarea e pe calea critică a fiecărui mesaj, nu are voie să agațe request-ul.
+const client = new OpenAI({ apiKey: env.OPENAI_API_KEY, timeout: 5000, maxRetries: 2 });
 
 export const INPUT_THRESHOLDS: Record<string, number> = {
   sexual: 0.5, 'sexual/minors': 0.1,

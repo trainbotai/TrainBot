@@ -20,10 +20,16 @@ export async function sendFakedStream(
   res.setHeader('X-Accel-Buffering', 'no');
   res.flushHeaders();
 
+  let closed = false;
+  res.on('close', () => {
+    closed = true;
+  });
+
   const delayMs = opts.chunkDelayMs ?? 50;
   const words = fullText.split(/(\s+)/);
 
   for (const word of words) {
+    if (closed) return;
     if (!word) continue;
     res.write(`data: {"chunk":${escapeJson(word)}}\n\n`);
     if (delayMs > 0) {
@@ -31,6 +37,7 @@ export async function sendFakedStream(
     }
   }
 
+  if (closed) return;
   res.write(`data: {"done":true,"inputTokens":${opts.tokens.in},"outputTokens":${opts.tokens.out}}\n\n`);
   res.end();
 }

@@ -109,7 +109,7 @@ describe('Teacher visibility', () => {
   });
 
   it('teacher cannot see personal sessions (not linked to assignment)', async () => {
-    const { studentToken, teacherToken, assignmentId } = await setupFullStack();
+    const { studentToken, teacherToken } = await setupFullStack();
 
     // Personal session only
     const session = await request(app)
